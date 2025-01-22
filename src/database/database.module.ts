@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { databaseProviders } from './ database.providers';
-import { TypeOrmConfigService } from 'src/config/typeorm.config.ts';
+import { TypeOrmConfigService } from 'src/config/typeorm.config';
 
 @Module({
   providers: [TypeOrmConfigService, ...databaseProviders],
