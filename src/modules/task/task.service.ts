@@ -8,7 +8,7 @@ import { Task } from 'src/entities/task.entity';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskRepository } from './repository/task.repository';
-import { TaskStatus } from 'src/enums';
+import { TaskStatus } from 'src/common/enums';
 import { ERROR_MESSAGES } from 'src/common/constants/error-messages';
 import { handleHttpException } from 'src/common/exceptions/handle-http.exception';
 
@@ -19,13 +19,13 @@ export class TaskService {
     private readonly repository: TaskRepository,
   ) {}
 
-//   async create(projectId: number, dto: CreateTaskDto): Promise<Task> {
-//     try {
-//       return await this.repository.create(dto);
-//     } catch (error) {
-//       throw new InternalServerErrorException(ERROR_MESSAGES.TASK.CREATE_FAILED);
-//     }
-//   }
+  //   async create(projectId: number, dto: CreateTaskDto): Promise<Task> {
+  //     try {
+  //       return await this.repository.create(dto);
+  //     } catch (error) {
+  //       throw new InternalServerErrorException(ERROR_MESSAGES.TASK.CREATE_FAILED);
+  //     }
+  //   }
 
   async findAll(): Promise<Task[]> {
     try {

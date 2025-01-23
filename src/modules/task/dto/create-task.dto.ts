@@ -6,7 +6,7 @@ import {
   IsDate,
   IsInt,
 } from 'class-validator';
-import { TaskStatus } from 'src/enums';
+import { TaskStatus } from 'src/common/enums';
 
 export class CreateTaskDto {
   @IsNotEmpty()

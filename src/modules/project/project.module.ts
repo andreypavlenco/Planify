@@ -3,7 +3,7 @@ import { ProjectService } from './project.service';
 import { ProjectController } from './project.controller';
 import { ProjectRepository } from './repository/project.repository';
 import { DataBaseModule } from 'src/database/database.module';
-import { projectProviders } from './repository/project.providers';
+import { projectProviders } from './providers/project.providers';
 
 @Module({
   imports: [DataBaseModule],

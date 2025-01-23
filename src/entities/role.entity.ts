@@ -5,9 +5,10 @@ import {
   ManyToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { User } from './user.entity';
-import { RoleName } from 'src/enums';
+import { RoleName } from 'src/common/enums';
 
 @Entity()
 export class Role {
@@ -21,7 +22,7 @@ export class Role {
   })
   name: RoleName;
 
-  @ManyToMany(() => User, (user) => user.roles)
+  @OneToMany(() => User, (user) => user.role)
   users: User[];
 
   @CreateDateColumn()

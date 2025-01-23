@@ -8,6 +8,7 @@ import {
   Index,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
 import { Task } from './task.entity';
 import { Role } from './role.entity';
@@ -32,12 +33,11 @@ export class User {
   @Column()
   password: string;
 
-  @ManyToMany(() => Role, (role) => role.users, {
+  @ManyToOne(() => Role, (role) => role.users, {
     cascade: true,
-    onDelete: 'CASCADE',
+    onDelete: 'SET NULL',
   })
-  @JoinTable()
-  roles: Role[];
+  role: Role;
 
   @OneToMany(() => Task, (task) => task.assignee, {
     cascade: true,

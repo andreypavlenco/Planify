@@ -1,13 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { BaseCrudRepository } from 'src/common/repositories/base-crud.repository';
 import { Task } from 'src/entities/task.entity';
-import { TaskStatus } from 'src/enums';
+import { TaskStatus } from 'src/common/enums';
 import { Repository } from 'typeorm';
+import { PROVIDER_TOKENS } from 'src/common/constants/provider.tokens';
 
 @Injectable()
 export class TaskRepository extends BaseCrudRepository<Task> {
   constructor(
-    @Inject('TASK_PROVIDERS')
+    @Inject(PROVIDER_TOKENS.TASK)
     protected readonly repository: Repository<Task>,
   ) {
     super(repository);

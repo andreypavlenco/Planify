@@ -1,5 +1,5 @@
 import { IsEnum, IsOptional, IsString, Length } from 'class-validator';
-import { ProjectStatus } from 'src/enums';
+import { ProjectStatus } from 'src/common/enums';
 
 export class CreateProjectDto {
   @IsString()
