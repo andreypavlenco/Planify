@@ -17,7 +17,7 @@ export class TypeOrmConfigService {
       synchronize: false,
       entities: [__dirname + '/../entities/*.entity.{js,ts}'],
       migrations: [__dirname + '/../migrations/**/*.{js,ts}'],
-      logging: true,
+      // logging: true,
       cache: {
         duration: 60000,
       },

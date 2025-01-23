@@ -1,3 +1,4 @@
+import { ProjectModule } from './../project/project.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -6,6 +7,7 @@ import { DataBaseModule } from 'src/database/database.module';
 
 @Module({
   imports: [
+    ProjectModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',

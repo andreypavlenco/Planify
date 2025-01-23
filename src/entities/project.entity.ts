@@ -11,12 +11,7 @@ import {
 } from 'typeorm';
 import { Task } from './task.entity';
 import { User } from './user.entity';
-
-export enum ProjectStatus {
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-  ARCHIVED = 'archived',
-}
+import { ProjectStatus } from 'src/enums';
 
 @Entity()
 @Index(['status'])
