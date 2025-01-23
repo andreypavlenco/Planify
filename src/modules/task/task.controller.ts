@@ -12,19 +12,19 @@ import { TaskService } from './task.service';
 import { Task } from 'src/entities/task.entity';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { TaskStatus } from 'src/enums';
+import { TaskStatus } from 'src/common/enums';
 
 @Controller('projects/:projectId/tasks')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
-//   @Post()
-//   create(
-//     @Param('projectId') projectId: number,
-//     @Body() dto: CreateTaskDto,
-//   ): Promise<Task> {
-//     return this.taskService.create(projectId, dto);
-//   }
+  //   @Post()
+  //   create(
+  //     @Param('projectId') projectId: number,
+  //     @Body() dto: CreateTaskDto,
+  //   ): Promise<Task> {
+  //     return this.taskService.create(projectId, dto);
+  //   }
 
   @Get(':id')
   findOne(@Param('id') id: number): Promise<Task> {

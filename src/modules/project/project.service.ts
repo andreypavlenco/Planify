@@ -8,7 +8,7 @@ import { Project } from 'src/entities/project.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { ProjectRepository } from './repository/project.repository';
-import { ProjectStatus } from 'src/enums';
+import { ProjectStatus } from 'src/common/enums';
 import { ERROR_MESSAGES } from 'src/common/constants/error-messages';
 import { handleHttpException } from 'src/common/exceptions/handle-http.exception';
 

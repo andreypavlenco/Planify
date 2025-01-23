@@ -13,6 +13,11 @@ export const ERROR_MESSAGES = {
     UPDATE_FAILED: 'Failed to update the task.',
     DELETE_FAILED: 'Failed to delete the task.',
   },
+  USER: {
+    CREATE_FAILED: 'Failed to create the user.',
+    RETRIEVE_FAILED: 'Failed to retrieve the user.',
+    NOT_FOUND: 'User not found.',
+  },
   DATABASE: {
     CONNECTION_FAILED: 'Failed to connect to the database.',
   },

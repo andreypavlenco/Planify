@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { Task } from './task.entity';
 import { User } from './user.entity';
-import { ProjectStatus } from 'src/enums';
+import { ProjectStatus } from 'src/common/enums';
 
 @Entity()
 @Index(['status'])
