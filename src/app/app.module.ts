@@ -1,3 +1,4 @@
+import { TaskModule } from './../task/task.module';
 import { ProjectModule } from './../project/project.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
@@ -7,6 +8,7 @@ import { DataBaseModule } from 'src/database/database.module';
 
 @Module({
   imports: [
+    TaskModule,
     ProjectModule,
     ConfigModule.forRoot({
       isGlobal: true,
