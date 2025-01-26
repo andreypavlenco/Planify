@@ -4,12 +4,17 @@ import { User } from 'src/entities/user.entity';
 import { Role } from 'src/entities/role.entity';
 import { RoleName } from 'src/common/enums';
 import { Project } from 'src/entities/project.entity';
+import { WinstonLoggerService } from 'src/logger/winston-logger.service';
 
 @Injectable()
 export class RoleService {
-  constructor(private readonly repository: RoleRepository) {}
+  constructor(
+    private readonly repository: RoleRepository,
+    private readonly logger: WinstonLoggerService,
+  ) {}
 
   async createForUser(user: User, roleName: RoleName): Promise<Role> {
+    this.logger.info('Creating role for user', { userId: user.id, roleName });
     return this.createRole(user, roleName);
   }
 
@@ -18,6 +23,12 @@ export class RoleService {
     project: Project,
     roleName: RoleName,
   ): Promise<Role> {
+    this.logger.info('Assigning role to user in project', {
+      userId: user.id,
+      projectId: project.id,
+      roleName,
+    });
+
     return this.createRole(user, roleName, project);
   }
 
@@ -25,11 +36,46 @@ export class RoleService {
     userId: number,
     projectId: number,
   ): Promise<RoleName | null> {
-    return this.repository.findRoleByUserAndProject(userId, projectId);
+    this.logger.info('Finding role by user and project', {
+      userId,
+      projectId,
+    });
+
+    try {
+      const role = await this.repository.findRoleByUserAndProject(
+        userId,
+        projectId,
+      );
+      this.logger.info('Role found', { userId, projectId, role });
+
+      return role;
+    } catch (error) {
+      this.logger.error('Failed to find role by user and project', {
+        userId,
+        projectId,
+        error: error.message,
+      });
+      throw new InternalServerErrorException(
+        'Failed to find role by user and project',
+      );
+    }
   }
 
   async findRoleByUser(userId: number): Promise<RoleName | null> {
-    return this.repository.findRoleByUser(userId);
+    this.logger.info('Finding role by user', { userId });
+
+    try {
+      const role = await this.repository.findRoleByUser(userId);
+      this.logger.info('Role found for user', { userId, role });
+
+      return role;
+    } catch (error) {
+      this.logger.error('Failed to find role by user', {
+        userId,
+        error: error.message,
+      });
+      throw new InternalServerErrorException('Failed to find role by user');
+    }
   }
 
   private async createRole(
@@ -37,15 +83,34 @@ export class RoleService {
     roleName: RoleName,
     project?: Project,
   ): Promise<Role> {
+    this.logger.info('Creating role', {
+      userId: user.id,
+      roleName,
+      projectId: project?.id,
+    });
+
     try {
       const role = new Role();
       role.user = user;
       role.project = project || null;
       role.role = roleName;
 
-      return await this.repository.create(role);
+      const createdRole = await this.repository.create(role);
+      this.logger.info('Role created successfully', {
+        roleId: createdRole.id,
+        userId: user.id,
+        roleName,
+        projectId: project?.id,
+      });
+
+      return createdRole;
     } catch (error) {
-      console.error('Error creating role:', error);
+      this.logger.error('Error creating role', {
+        userId: user.id,
+        roleName,
+        projectId: project?.id,
+        error: error.message,
+      });
       throw new InternalServerErrorException('Failed to create role');
     }
   }
