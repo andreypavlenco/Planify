@@ -8,7 +8,7 @@ import { ProjectService } from './project.service';
 import { ProjectController } from './project.controller';
 import { ProjectRepository } from './repository/project.repository';
 import { DataBaseModule } from 'src/database/database.module';
-import { ProjectProviders } from 'src/common/providers';
+import { ProjectProviders } from 'src/database/providers';
 import { UserModule } from '../user/user.module';
 import { RoleModule } from '../role/role.module';
 import { ExtractProjectIdMiddleware } from 'src/common/middlewares';

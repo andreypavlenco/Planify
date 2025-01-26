@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { AuthPayload } from '../types';
-import { WinstonLoggerService } from 'src/logger/winston-logger.service';
+import { WinstonLoggerService } from 'src/core/utils/logger';
 
 @Injectable()
 export class JwtAccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {

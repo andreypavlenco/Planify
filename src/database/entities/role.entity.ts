@@ -6,7 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { User } from './user.entity';
-import { RoleName } from 'src/common/enums';
+import { RoleName } from 'src/shared/enums';
 import { Project } from './project.entity';
 
 @Entity()

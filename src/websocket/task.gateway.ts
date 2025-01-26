@@ -9,8 +9,8 @@ import {
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Task } from 'src/entities/task.entity';
-import { WinstonLoggerService } from 'src/logger/winston-logger.service';
+import { WinstonLoggerService } from 'src/core/utils/logger';
+import { Task } from 'src/database/entities/task.entity';
 
 @WebSocketGateway({
   cors: {

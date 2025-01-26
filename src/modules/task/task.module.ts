@@ -8,14 +8,14 @@ import {
 } from '@nestjs/common';
 import { TaskRepository } from './repository/task.repository';
 import { DataBaseModule } from 'src/database/database.module';
-import { TaskProviders } from 'src/common/providers';
+import { TaskProviders } from 'src/database/providers';
 import { RoleModule } from '../role/role.module';
 import { UserModule } from '../user/user.module';
 import { ProjectModule } from '../project/project.module';
 import { ActionHistoryModule } from '../action-history/action-history.module';
 import { ExtractProjectIdMiddleware } from 'src/common/middlewares';
-import { TaskGateway } from './task.gateway';
 import { JwtModule } from '@nestjs/jwt';
+import { TaskGateway } from 'src/websocket/task.gateway';
 
 @Module({
   imports: [

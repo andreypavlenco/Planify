@@ -3,16 +3,16 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { User } from 'src/entities/user.entity';
+import { User } from 'src/database/entities/user.entity';
 import { UserRepository } from './repository/user.repository';
-import { ERROR_MESSAGES } from 'src/common/constants/error-messages';
-import { handleHttpException } from 'src/common/exceptions/handle-http.exception';
 import { CreateUserDto } from './dto/create-user.dto';
-import { RoleName } from 'src/common/enums';
+import { RoleName } from 'src/shared/enums';
 import { RoleService } from '../role/role.service';
-import { Project } from 'src/entities/project.entity';
+import { Project } from 'src/database/entities/project.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { WinstonLoggerService } from 'src/logger/winston-logger.service';
+import { WinstonLoggerService } from 'src/core/utils/logger';
+import { handleHttpException } from 'src/shared/exceptions';
+import { ERROR_MESSAGES } from 'src/common/constants';
 
 @Injectable()
 export class UserService {
@@ -133,6 +133,7 @@ export class UserService {
     try {
       const exists = await this.repository.emailExists(email);
       this.logger.info('Email existence check completed', { email, exists });
+
       return exists;
     } catch (error) {
       this.logger.error('Failed to check email existence', {

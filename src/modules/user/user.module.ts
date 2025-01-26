@@ -2,7 +2,7 @@ import { DataBaseModule } from 'src/database/database.module';
 import { UserRepository } from './repository/user.repository';
 import { UserService } from './user.service';
 import { Module } from '@nestjs/common';
-import { UserProviders } from 'src/common/providers';
+import { UserProviders } from 'src/database/providers';
 import { RoleModule } from '../role/role.module';
 
 @Module({

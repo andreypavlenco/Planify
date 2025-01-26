@@ -22,10 +22,10 @@ import {
   ApiBearerAuth,
 } from '@nestjs/swagger';
 import { TaskService } from './task.service';
-import { Task } from 'src/entities/task.entity';
+import { Task } from 'src/database/entities/task.entity';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { RoleName, TaskStatus } from 'src/common/enums';
+import { RoleName, TaskStatus } from 'src/shared/enums';
 import { Roles, User } from 'src/common/decorators';
 import { RoleGuard } from '../auth/guards/role.guard';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';

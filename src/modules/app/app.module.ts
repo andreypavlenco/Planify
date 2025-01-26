@@ -7,16 +7,19 @@ import { ProjectModule } from '../project/project.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DataBaseModule } from 'src/database/database.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ActionHistoryModule } from '../action-history/action-history.module';
-import { LoggerModule } from 'src/logger/logger.module.';
+import { LoggerModule } from 'src/core/utils/logger/logger.module.';
+import { WeatherModule } from '../weather-api/weather.module';
+import { RedisModule } from 'src/redis/redis.module';
 
 @Module({
   imports: [
     LoggerModule,
+    WeatherModule,
     ActionHistoryModule,
     RoleModule,
     UserModule,
@@ -26,6 +29,8 @@ import { LoggerModule } from 'src/logger/logger.module.';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    RedisModule,
+
     DataBaseModule,
     AuthModule,
   ],
@@ -37,5 +42,6 @@ import { LoggerModule } from 'src/logger/logger.module.';
       useClass: JwtAuthGuard,
     },
   ],
+  //exports: [CacheModule],
 })
 export class AppModule {}

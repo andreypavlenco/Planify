@@ -5,14 +5,14 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { UserService } from '../user/user.service';
-import { User } from 'src/entities/user.entity';
+import { User } from 'src/database/entities/user.entity';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { AuthTokens } from './types';
 import { RegisterAuthDto } from './dto/register-auth.dto';
 import { ERROR_MESSAGES } from 'src/common/constants';
-import { handleHttpException } from 'src/common/exceptions/handle-http.exception';
 import { JwtTokenService } from './token/jwt-token.service';
-import { WinstonLoggerService } from 'src/logger/winston-logger.service';
+import { WinstonLoggerService } from 'src/core/utils/logger';
+import { handleHttpException } from 'src/shared/exceptions';
 
 @Injectable()
 export class AuthService {

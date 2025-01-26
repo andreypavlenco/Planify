@@ -92,6 +92,18 @@ export class WinstonLoggerService {
     this.logger.help(message);
   }
 
+  log(
+    message: string,
+    level: keyof typeof Levels.levels = 'info',
+    meta?: Record<string, any>,
+  ) {
+    if (meta) {
+      this.logger.log(level, message, { meta });
+    } else {
+      this.logger.log(level, message);
+    }
+  }
+
   data(message: string) {
     this.logger.data(message);
   }
