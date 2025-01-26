@@ -20,6 +20,7 @@ import { RoleName, TaskStatus } from 'src/common/enums';
 import { Roles, User } from 'src/common/decorators';
 import { RoleGuard } from '../auth/guards/role.guard';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { DeleteResult } from 'typeorm';
 
 @Controller('projects/:projectId/tasks')
 export class TaskController {
@@ -46,15 +47,19 @@ export class TaskController {
   @Roles(RoleName.ADMIN, RoleName.MANAGER, RoleName.USER)
   @UseGuards(RoleGuard)
   @Put(':id')
-  update(@Param('id') id: number, @Body() dto: UpdateTaskDto): Promise<Task> {
-    return this.taskService.update(id, dto);
+  update(
+    @Param('id') id: number,
+    @Body() dto: UpdateTaskDto,
+    @User() user,
+  ): Promise<Task> {
+    return this.taskService.update(id, dto, user.id);
   }
 
   @Roles(RoleName.ADMIN, RoleName.MANAGER)
   @UseGuards(RoleGuard)
   @Delete(':id')
-  remove(@Param('id') id: number): Promise<void> {
-    return this.taskService.remove(id);
+  remove(@Param('id') id: number, @User() user): Promise<DeleteResult> {
+    return this.taskService.remove(id, user.id);
   }
 
   @Roles(RoleName.ADMIN, RoleName.MANAGER, RoleName.USER)

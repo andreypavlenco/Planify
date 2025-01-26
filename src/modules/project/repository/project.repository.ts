@@ -3,7 +3,7 @@ import { BaseCrudRepository } from 'src/common/repositories/base-crud.repository
 import { Project } from 'src/entities/project.entity';
 import { ProjectStatus } from 'src/common/enums';
 import { FindManyOptions, Repository } from 'typeorm';
-import { PROVIDER_TOKENS } from 'src/common/providers/provider.tokens';
+import { PROVIDER_TOKENS } from 'src/common/constants/provider.tokens';
 
 @Injectable()
 export class ProjectRepository extends BaseCrudRepository<Project> {

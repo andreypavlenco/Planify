@@ -12,10 +12,17 @@ import { TaskProviders } from 'src/common/providers';
 import { RoleModule } from '../role/role.module';
 import { UserModule } from '../user/user.module';
 import { ProjectModule } from '../project/project.module';
-import { ExtractProjectIdMiddleware } from '../project/project.middleware';
+import { ActionHistoryModule } from '../action-history/action-history.module';
+import { ExtractProjectIdMiddleware } from 'src/common/middlewares';
 
 @Module({
-  imports: [DataBaseModule, RoleModule, UserModule, ProjectModule],
+  imports: [
+    DataBaseModule,
+    RoleModule,
+    UserModule,
+    ProjectModule,
+    ActionHistoryModule,
+  ],
   controllers: [TaskController],
   providers: [TaskService, ...TaskProviders, TaskRepository],
 })
