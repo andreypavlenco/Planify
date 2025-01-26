@@ -12,6 +12,8 @@ import {
 import { Task } from './task.entity';
 import { User } from './user.entity';
 import { ProjectStatus } from 'src/common/enums';
+import { Role } from './role.entity';
+import { ActionHistory } from './action-history.entity';
 
 @Entity()
 @Index(['status'])
@@ -39,6 +41,17 @@ export class Project {
     onDelete: 'CASCADE',
   })
   tasks: Task[];
+
+  @OneToMany(() => Role, (role) => role.project, {
+    cascade: true,
+  })
+  roles: Role[];
+
+  @OneToMany(() => ActionHistory, (actionHistory) => actionHistory.project, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  actionHistory: ActionHistory[];
 
   @ManyToMany(() => User, (user) => user.projects)
   @JoinTable()

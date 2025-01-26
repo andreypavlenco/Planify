@@ -1,8 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { User } from 'src/entities/user.entity';
 import { BaseCrudRepository } from 'src/common/repositories/base-crud.repository';
-import { PROVIDER_TOKENS } from 'src/common/constants/provider.tokens';
+import { PROVIDER_TOKENS } from 'src/common/providers/provider.tokens';
 
 @Injectable()
 export class UserRepository extends BaseCrudRepository<User> {
@@ -13,28 +13,50 @@ export class UserRepository extends BaseCrudRepository<User> {
     super(repository);
   }
 
-  findOneWithTasks(id: number, relations: string[] = []): Promise<User> {
-    return this.findOne(id, relations);
+  async findUserWithRelations(
+    id: number,
+    relations: string[] = [],
+  ): Promise<User> {
+    return this.findById(id, relations);
   }
 
-  findWithFilters(
-    sortBy: string = 'createdAt',
+  async findWithFilters(
+    filters: { name?: string; role?: string },
+    sortBy: keyof User = 'createdAt',
     sortDirection: 'ASC' | 'DESC' = 'ASC',
-    name?: string,
-    role?: string,
   ): Promise<User[]> {
-    const query = this.repository.createQueryBuilder('user');
-
-    if (name) {
-      query.andWhere('user.name LIKE :name', { name: `%${name}%` });
+    const validSortFields: Array<keyof User> = [
+      'id',
+      'createdAt',
+      'updatedAt',
+      'firstName',
+      'lastName',
+      'email',
+    ];
+    if (!validSortFields.includes(sortBy)) {
+      throw new Error(`Invalid sort field: ${sortBy}`);
     }
 
-    if (role) {
-      query.andWhere('user.role = :role', { role });
+    const where: Record<string, any> = {};
+    if (filters.name) {
+      where.name = Like(`%${filters.name}%`);
+    }
+    if (filters.role) {
+      where.role = filters.role;
     }
 
-    query.orderBy(`user.${sortBy}`, sortDirection);
+    return this.repository.find({
+      where,
+      order: { [sortBy]: sortDirection },
+    });
+  }
 
-    return query.getMany();
+  async findByEmail(email: string): Promise<User | null> {
+    return this.repository.findOneBy({ email });
+  }
+
+  async emailExists(email: string): Promise<boolean> {
+    const emailExists = await this.repository.exists({ where: { email } });
+    return emailExists;
   }
 }

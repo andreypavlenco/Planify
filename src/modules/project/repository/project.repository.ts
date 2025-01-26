@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseCrudRepository } from 'src/common/repositories/base-crud.repository';
 import { Project } from 'src/entities/project.entity';
 import { ProjectStatus } from 'src/common/enums';
-import { Repository } from 'typeorm';
-import { PROVIDER_TOKENS } from 'src/common/constants/provider.tokens';
+import { FindManyOptions, Repository } from 'typeorm';
+import { PROVIDER_TOKENS } from 'src/common/providers/provider.tokens';
 
 @Injectable()
 export class ProjectRepository extends BaseCrudRepository<Project> {
@@ -14,22 +14,31 @@ export class ProjectRepository extends BaseCrudRepository<Project> {
     super(repository);
   }
 
-  findOneWithUsersAndTasks(
+  async findByIdWithRelations(
     id: number,
-    relations: string[] = [],
+    relations: string[] = ['users', 'tasks'],
   ): Promise<Project> {
-    return this.findOne(id, relations);
+    return this.findById(id, relations);
   }
 
-  findWithFilters(
+  async findProjectsByStatusAndDate(
     sortDate: 'ASC' | 'DESC',
     status?: ProjectStatus,
   ): Promise<Project[]> {
-    const query = this.repository.createQueryBuilder('project');
-    if (status) {
-      query.where('project.status = :status', { status });
+    try {
+      const options: FindManyOptions<Project> = {
+        order: {
+          createdAt: sortDate,
+        },
+      };
+      if (status) {
+        options.where = { status };
+      }
+      return await this.repository.find(options);
+    } catch (error) {
+      throw new Error(
+        `Error fetching projects with filters (status: ${status}, sort: ${sortDate}): ${error.message}`,
+      );
     }
-    query.orderBy('project.createdAt', sortDate);
-    return query.getMany();
   }
 }

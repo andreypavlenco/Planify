@@ -26,7 +26,7 @@ export abstract class BaseCrudRepository<Entity extends ObjectLiteral> {
     return this.repository.find({ relations });
   }
 
-  findOne(id: number, relations: string[] = []): Promise<Entity | null> {
+  findById(id: number, relations: string[] = []): Promise<Entity | null> {
     const where: FindOptionsWhere<Entity> = {
       id,
     } as unknown as FindOptionsWhere<Entity>;

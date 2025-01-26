@@ -7,15 +7,17 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Index,
+  OneToMany,
 } from 'typeorm';
 import { Project } from './project.entity';
 import { User } from './user.entity';
 import { TaskStatus } from 'src/common/enums';
+import { ActionHistory } from './action-history.entity';
 
 @Entity()
 @Index(['status'])
 @Index(['deadline'])
-@Index(['project', 'assignee', 'status'])
+@Index(['project', 'owner', 'assignee', 'status'])
 export class Task {
   @PrimaryGeneratedColumn()
   id: number;
@@ -27,7 +29,14 @@ export class Task {
   @JoinColumn()
   project: Project;
 
-  @ManyToOne(() => User, (user) => user.tasks, {
+  @ManyToOne(() => User, (user) => user.ownedTasks, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
+  owner: User;
+
+  @ManyToOne(() => User, (user) => user.assignedTasks, {
     nullable: true,
     onDelete: 'SET NULL',
   })
@@ -50,6 +59,12 @@ export class Task {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', nullable: true })
   description: string;
+
+  @OneToMany(() => ActionHistory, (actionHistory) => actionHistory.task, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  actionHistory: ActionHistory[];
 }

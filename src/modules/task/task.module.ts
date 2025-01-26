@@ -1,20 +1,33 @@
 import { TaskService } from './task.service';
 import { TaskController } from './task.controller';
-import { Module } from '@nestjs/common';
-import { taskProviders } from './providers/task.providers';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { TaskRepository } from './repository/task.repository';
 import { DataBaseModule } from 'src/database/database.module';
+import { TaskProviders } from 'src/common/providers';
+import { RoleModule } from '../role/role.module';
+import { UserModule } from '../user/user.module';
+import { ProjectModule } from '../project/project.module';
+import { ExtractProjectIdMiddleware } from '../project/project.middleware';
 
 @Module({
-  imports: [DataBaseModule],
+  imports: [DataBaseModule, RoleModule, UserModule, ProjectModule],
   controllers: [TaskController],
-  providers: [
-    TaskService,
-    ...taskProviders,
-    {
-      provide: 'TASK_REPOSITORY',
-      useClass: TaskRepository,
-    },
-  ],
+  providers: [TaskService, ...TaskProviders, TaskRepository],
 })
-export class TaskModule {}
+export class TaskModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(ExtractProjectIdMiddleware)
+      .forRoutes(
+        { path: 'projects/:projectId/tasks', method: RequestMethod.POST },
+        { path: 'projects/:projectId/tasks', method: RequestMethod.GET },
+        { path: 'projects/:projectId/tasks/:id', method: RequestMethod.DELETE },
+        { path: 'projects/:projectId/tasks/:id', method: RequestMethod.PUT },
+      );
+  }
+}

@@ -1,19 +1,13 @@
 import { DataBaseModule } from 'src/database/database.module';
-import { userProviders } from './providers/user.providers';
 import { UserRepository } from './repository/user.repository';
 import { UserService } from './user.service';
 import { Module } from '@nestjs/common';
+import { UserProviders } from 'src/common/providers';
+import { RoleModule } from '../role/role.module';
 
 @Module({
-  imports: [DataBaseModule],
-  providers: [
-    UserService,
-    ...userProviders,
-    {
-      provide: 'USER_REPOSITORY',
-      useClass: UserRepository,
-    },
-  ],
+  imports: [DataBaseModule, RoleModule],
+  providers: [UserService, ...UserProviders, UserRepository],
   exports: [UserService],
 })
 export class UserModule {}
