@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BaseCrudRepository } from 'src/common/repositories/base-crud.repository';
 import { Task } from 'src/entities/task.entity';
 import { TaskStatus } from 'src/common/enums';
-import { Repository } from 'typeorm';
-import { PROVIDER_TOKENS } from 'src/common/constants/provider.tokens';
+import { FindManyOptions, Repository } from 'typeorm';
+import { PROVIDER_TOKENS } from 'src/common/providers/provider.tokens';
 
 @Injectable()
 export class TaskRepository extends BaseCrudRepository<Task> {
@@ -18,18 +18,20 @@ export class TaskRepository extends BaseCrudRepository<Task> {
     id: number,
     relations: string[] = [],
   ): Promise<Task> {
-    return this.findOne(id, relations);
+    return this.findById(id, relations);
   }
 
   findWithFilters(
-    sortDate: 'ASC' | 'DESC',
+    sortDate: 'ASC' | 'DESC' = 'ASC',
     status?: TaskStatus,
   ): Promise<Task[]> {
-    const query = this.repository.createQueryBuilder('task');
-    if (status) {
-      query.where('task.status = :status', { status });
+    if (!['ASC', 'DESC'].includes(sortDate)) {
+      throw new Error('Invalid sort order. Use "ASC" or "DESC".');
     }
-    query.orderBy('task.createdAt', sortDate);
-    return query.getMany();
+    const options: FindManyOptions<Task> = {
+      where: status ? { status } : {},
+      order: { createdAt: sortDate },
+    };
+    return this.repository.find(options);
   }
 }

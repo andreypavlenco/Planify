@@ -7,11 +7,11 @@ import {
   Index,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
 } from 'typeorm';
 import { Task } from './task.entity';
-import { Role } from './role.entity';
 import { Project } from './project.entity';
+import { Role } from './role.entity';
+import { ActionHistory } from './action-history.entity';
 
 @Entity()
 @Index(['lastName'])
@@ -32,20 +32,34 @@ export class User {
   @Column()
   password: string;
 
-  @ManyToOne(() => Role, (role) => role.users, {
+  @OneToMany(() => Task, (task) => task.owner, {
     cascade: true,
-    onDelete: 'SET NULL',
+    onDelete: 'CASCADE',
   })
-  role: Role;
+  ownedTasks: Task[];
 
   @OneToMany(() => Task, (task) => task.assignee, {
     cascade: true,
     onDelete: 'SET NULL',
   })
-  tasks: Task[];
+  assignedTasks: Task[];
+
+  @OneToMany(() => Role, (role) => role.user, {
+    cascade: true,
+  })
+  roles: Role[];
 
   @ManyToMany(() => Project, (project) => project.users)
   projects: Project[];
+
+  @OneToMany(() => ActionHistory, (actionHistory) => actionHistory.user, {
+    cascade: true,
+    onDelete: 'SET NULL',
+  })
+  actionHistory: ActionHistory[];
+
+  @Column({ nullable: true, type: 'text' })
+  refreshToken: string | null;
 
   @CreateDateColumn()
   createdAt: Date;

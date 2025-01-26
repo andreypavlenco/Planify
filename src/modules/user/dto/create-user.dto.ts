@@ -1,33 +1,29 @@
-import {
-  IsNotEmpty,
-  IsString,
-  IsEmail,
-  MinLength,
-  IsOptional,
-  IsEnum,
-  IsArray,
-} from 'class-validator';
-import { RoleName } from 'src/common/enums';
+import { Exclude } from 'class-transformer';
+import { IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
 
 export class CreateUserDto {
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty({ message: 'First name cannot be empty' })
+  @Length(2, 50, { message: 'First name must be between 2 and 50 characters' })
   firstName: string;
 
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty({ message: 'Last name cannot be empty' })
+  @Length(2, 50, { message: 'Last name must be between 2 and 50 characters' })
   lastName: string;
 
-  @IsNotEmpty()
-  @IsEmail()
+  @IsEmail({}, { message: 'Invalid email address' })
   email: string;
 
-  @IsNotEmpty()
-  @MinLength(6)
+  @IsString()
+  @IsNotEmpty({ message: 'Password cannot be empty' })
+  @Length(8, 50, { message: 'Password must be between 8 and 50 characters' })
+  @Exclude()
   password: string;
 
-  @IsOptional()
-  @IsArray()
-  @IsEnum(RoleName, { each: true })
-  roles?: RoleName[];
+  @IsString()
+  @IsNotEmpty({ message: 'Password cannot be empty' })
+  @Length(8, 50, { message: 'Password must be between 8 and 50 characters' })
+  @Exclude()
+  refreshToken: string;
 }
