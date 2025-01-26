@@ -38,7 +38,6 @@ export class ActionHistoryService {
         taskId: task.id,
         userId: user.id,
       });
-
       return actionHistory;
     } catch (error) {
       this.logger.error('Failed to create ActionHistory entry', {

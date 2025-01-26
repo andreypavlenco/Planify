@@ -6,7 +6,7 @@ import {
 import { Project } from 'src/entities/project.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { ProjectRepository } from './repository/project.repository';
-import { ProjectStatus, RoleName } from 'src/common/enums';
+import { ProjectStatus, RoleName, TaskStatus } from 'src/common/enums';
 import { ERROR_MESSAGES } from 'src/common/constants/error-messages';
 import { handleHttpException } from 'src/common/exceptions/handle-http.exception';
 import { UserService } from '../user/user.service';
@@ -14,6 +14,7 @@ import { RoleService } from '../role/role.service';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { WinstonLoggerService } from 'src/logger/winston-logger.service';
 import { DeleteResult } from 'typeorm';
+import { TaskGateway } from '../task/task.gateway';
 
 @Injectable()
 export class ProjectService {

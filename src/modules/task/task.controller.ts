@@ -94,11 +94,12 @@ export class TaskController {
   @UseGuards(RoleGuard)
   @Put(':id')
   update(
+    @Param('projectId', ParseIntPipe) projectId: number,
     @Param('id') id: number,
     @Body() dto: UpdateTaskDto,
     @User() user,
   ): Promise<Task> {
-    return this.taskService.update(id, dto, user.id);
+    return this.taskService.update(id, dto, user.id, projectId);
   }
 
   @ApiOperation({ summary: 'Delete task by ID' })
@@ -111,8 +112,12 @@ export class TaskController {
   @Roles(RoleName.ADMIN, RoleName.MANAGER)
   @UseGuards(RoleGuard)
   @Delete(':id')
-  remove(@Param('id') id: number, @User() user): Promise<DeleteResult> {
-    return this.taskService.remove(id, user.id);
+  remove(
+    @Param('id') id: number,
+    @User() user,
+    @Param('projectId', ParseIntPipe) projectId: number,
+  ): Promise<DeleteResult> {
+    return this.taskService.remove(id, user.id, projectId);
   }
 
   @ApiOperation({ summary: 'Get filtered tasks' })
