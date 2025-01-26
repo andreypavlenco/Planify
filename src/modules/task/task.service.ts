@@ -12,6 +12,9 @@ import { ERROR_MESSAGES } from 'src/common/constants/error-messages';
 import { handleHttpException } from 'src/common/exceptions/handle-http.exception';
 import { ProjectService } from '../project/project.service';
 import { UserService } from '../user/user.service';
+import { ActionHistoryService } from '../action-history/action-history.service';
+import { ACTIONS } from 'src/common/constants/actions';
+import { DeleteResult } from 'typeorm';
 
 @Injectable()
 export class TaskService {
@@ -19,6 +22,7 @@ export class TaskService {
     private readonly repository: TaskRepository,
     private readonly projectService: ProjectService,
     private readonly userService: UserService,
+    private readonly actionHistoryService: ActionHistoryService,
   ) {}
 
   async create(
@@ -32,12 +36,19 @@ export class TaskService {
         this.userService.findById(userId),
         dto.assigneeId ? this.userService.findById(dto.assigneeId) : null,
       ]);
-      return await this.repository.create({
+      const task = await this.repository.create({
         ...dto,
         project,
         owner,
         assignee,
       });
+      await this.actionHistoryService.create(
+        task,
+        owner,
+        project,
+        ACTIONS.TASK.CREATED,
+      );
+      return task;
     } catch (error) {
       throw new InternalServerErrorException(
         `${ERROR_MESSAGES.TASK.CREATE_FAILED} for Project ID ${projectId}: ${error.message}`,
@@ -75,10 +86,30 @@ export class TaskService {
     }
   }
 
-  async update(id: number, dto: UpdateTaskDto): Promise<Task> {
+  async update(id: number, dto: UpdateTaskDto, userId: number): Promise<Task> {
     try {
       const task = await this.findById(id);
-      return await this.repository.saveEntity({ ...task, ...dto });
+      const project = task.project;
+      const user = await this.userService.findById(userId);
+      const updates: string[] = [];
+
+      if (dto.status && dto.status !== task.status) {
+        updates.push(ACTIONS.TASK.STATUS_CHANGED);
+      }
+
+      if (dto.assigneeId && dto.assigneeId !== task.assignee?.id) {
+        updates.push(ACTIONS.TASK.ASSIGNEE_CHANGED);
+      }
+
+      const updateTask = await this.repository.saveEntity({ ...task, ...dto });
+
+      await this.actionHistoryService.create(
+        updateTask,
+        user,
+        project,
+        updates.join(', '),
+      );
+      return updateTask;
     } catch (error) {
       throw new InternalServerErrorException(
         `${ERROR_MESSAGES.TASK.UPDATE_FAILED}: ${error.message}`,
@@ -86,10 +117,19 @@ export class TaskService {
     }
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: number, userId: number): Promise<DeleteResult> {
     try {
       const task = await this.findById(id);
-      await this.repository.remove(task.id);
+      const project = task.project;
+      const user = await this.userService.findById(userId);
+      await this.actionHistoryService.create(
+        task,
+        user,
+        project,
+        ACTIONS.TASK.DELETED,
+      );
+
+      return await this.repository.remove(task.id);
     } catch (error) {
       throw new InternalServerErrorException(
         `${ERROR_MESSAGES.TASK.DELETE_FAILED}: ${error.message}`,

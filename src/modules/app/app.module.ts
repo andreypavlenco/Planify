@@ -1,3 +1,4 @@
+import { ActionHistoryController } from '../action-history/action-history.controller';
 import { RoleModule } from './../role/role.module';
 import { AuthModule } from './../auth/auth.module';
 import { UserModule } from './../user/user.module';
@@ -10,9 +11,11 @@ import { ConfigModule } from '@nestjs/config';
 import { DataBaseModule } from 'src/database/database.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ActionHistoryModule } from '../action-history/action-history.module';
 
 @Module({
   imports: [
+    ActionHistoryModule,
     RoleModule,
     UserModule,
     TaskModule,
@@ -24,7 +27,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
     DataBaseModule,
     AuthModule,
   ],
-  controllers: [AppController],
+  controllers: [ActionHistoryController, AppController],
   providers: [
     AppService,
     {
