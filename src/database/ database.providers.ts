@@ -13,7 +13,6 @@ export const databaseProviders = [
       try {
         return await dataSource.initialize();
       } catch (error) {
-        console.error('Error during DataSource initialization', error);
         throw error;
       }
     },
