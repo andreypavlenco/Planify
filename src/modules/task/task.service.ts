@@ -16,6 +16,9 @@ import { ActionHistoryService } from '../action-history/action-history.service';
 import { ACTIONS } from 'src/common/constants/actions';
 import { DeleteResult } from 'typeorm';
 import { WinstonLoggerService } from 'src/logger/winston-logger.service';
+import { TaskGateway } from './task.gateway';
+import { Project } from 'src/entities/project.entity';
+import { User } from 'src/entities/user.entity';
 
 @Injectable()
 export class TaskService {
@@ -25,6 +28,7 @@ export class TaskService {
     private readonly userService: UserService,
     private readonly actionHistoryService: ActionHistoryService,
     private readonly logger: WinstonLoggerService,
+    private readonly taskGateway: TaskGateway,
   ) {}
 
   async create(
@@ -63,6 +67,8 @@ export class TaskService {
       this.logger.info('Task creation logged in action history', {
         taskId: task.id,
       });
+
+      this.taskGateway.notifyTaskCreated(task);
 
       return task;
     } catch (error) {
@@ -126,46 +132,45 @@ export class TaskService {
     }
   }
 
-  async update(id: number, dto: UpdateTaskDto, userId: number): Promise<Task> {
-    this.logger.info('Updating task', { taskId: id, userId, updates: dto });
+  async update(
+    id: number,
+    dto: UpdateTaskDto,
+    userId: number,
+    projectId: number,
+  ): Promise<Task> {
+    this.logger.info('Starting task update', {
+      taskId: id,
+      userId,
+      updates: dto,
+    });
 
     try {
-      const task = await this.findById(id);
-      const project = task.project;
-      const user = await this.userService.findById(userId);
+      const [task, project, user] = await Promise.all([
+        this.findById(id),
+        this.projectService.findById(projectId),
+        this.userService.findById(userId),
+      ]);
       const updates: string[] = [];
 
       if (dto.status && dto.status !== task.status) {
+        this.logStatusChange(task, dto.status);
+        this.taskGateway.notifyTaskStatusUpdated(
+          task.name,
+          dto.status,
+          project.id,
+        );
         updates.push(ACTIONS.TASK.STATUS_CHANGED);
-        this.logger.info('Task status changed', {
-          taskId: id,
-          oldStatus: task.status,
-          newStatus: dto.status,
-        });
       }
 
       if (dto.assigneeId && dto.assigneeId !== task.assignee?.id) {
-        updates.push(ACTIONS.TASK.ASSIGNEE_CHANGED);
-        this.logger.info('Task assignee changed', {
-          taskId: id,
-          oldAssigneeId: task.assignee?.id,
-          newAssigneeId: dto.assigneeId,
-        });
+        await this.handleAssigneeChange(dto.assigneeId, task, updates);
       }
 
-      const updatedTask = await this.repository.saveEntity({ ...task, ...dto });
-      this.logger.info('Task updated successfully', { taskId: id });
+      const updatedTask = await this.repository.update({ ...task, ...dto });
+      this.logger.info('Task successfully updated', { taskId: id });
 
-      await this.actionHistoryService.create(
-        updatedTask,
-        user,
-        project,
-        updates.join(', '),
-      );
-      this.logger.info('Task update logged in action history', {
-        taskId: id,
-        updates,
-      });
+      updates.push(ACTIONS.TASK.UPDATED);
+      await this.logActionHistory(updatedTask, user, project, updates);
 
       return updatedTask;
     } catch (error) {
@@ -180,14 +185,71 @@ export class TaskService {
     }
   }
 
-  async remove(id: number, userId: number): Promise<DeleteResult> {
+  private logStatusChange(task: Task, newStatus: string): void {
+    this.logger.info('Task status changed', {
+      taskId: task.id,
+      oldStatus: task.status,
+      newStatus,
+    });
+  }
+
+  private async handleAssigneeChange(
+    assigneeId: number,
+    task: Task,
+    updates: string[],
+  ): Promise<void> {
+    const newAssignee = await this.userService.findById(assigneeId);
+    if (!newAssignee) {
+      this.logger.warn(`Assignee with ID ${assigneeId} not found`);
+      return;
+    }
+
+    updates.push(ACTIONS.TASK.ASSIGNEE_CHANGED);
+    this.logger.info('Task assignee changed', {
+      taskId: task.id,
+      oldAssigneeId: task.assignee?.id,
+      newAssigneeId: assigneeId,
+    });
+  }
+
+  private async logActionHistory(
+    task: Task,
+    user: User,
+    project: Project,
+    updates: string[],
+  ): Promise<void> {
+    try {
+      await this.actionHistoryService.create(
+        task,
+        user,
+        project,
+        updates.join(', '),
+      );
+      this.logger.info('Action history successfully logged', {
+        taskId: task.id,
+        updates,
+      });
+    } catch (error) {
+      this.logger.error('Failed to log action history', {
+        taskId: task.id,
+        error: error.message,
+      });
+    }
+  }
+
+  async remove(
+    id: number,
+    userId: number,
+    projectId: number,
+  ): Promise<DeleteResult> {
     this.logger.info('Removing task', { taskId: id, userId });
 
     try {
-      const task = await this.findById(id);
-      const project = task.project;
-      const user = await this.userService.findById(userId);
-
+      const [task, project, user] = await Promise.all([
+        this.findById(id),
+        this.projectService.findById(projectId),
+        this.userService.findById(userId),
+      ]);
       await this.actionHistoryService.create(
         task,
         user,
