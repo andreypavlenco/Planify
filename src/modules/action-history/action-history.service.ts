@@ -4,10 +4,14 @@ import { ActionHistory } from 'src/entities/action-history.entity';
 import { Task } from 'src/entities/task.entity';
 import { User } from 'src/entities/user.entity';
 import { Project } from 'src/entities/project.entity';
+import { WinstonLoggerService } from 'src/logger/winston-logger.service';
 
 @Injectable()
 export class ActionHistoryService {
-  constructor(private readonly repository: ActionHistoryRepository) {}
+  constructor(
+    private readonly repository: ActionHistoryRepository,
+    private readonly logger: WinstonLoggerService,
+  ) {}
 
   async create(
     task: Task,
@@ -15,22 +19,60 @@ export class ActionHistoryService {
     project: Project,
     action: string,
   ): Promise<ActionHistory> {
+    this.logger.info('Creating ActionHistory entry', {
+      taskId: task.id,
+      userId: user.id,
+      projectId: project.id,
+      action,
+    });
+
     try {
-      return await this.repository.create({
+      const actionHistory = await this.repository.create({
         task,
         user,
         project,
         action,
       });
+      this.logger.info('ActionHistory entry created successfully', {
+        actionHistoryId: actionHistory.id,
+        taskId: task.id,
+        userId: user.id,
+      });
+
+      return actionHistory;
     } catch (error) {
+      this.logger.error('Failed to create ActionHistory entry', {
+        taskId: task.id,
+        userId: user.id,
+        projectId: project.id,
+        action,
+        error: error.message,
+      });
       throw new Error(`Failed to create ActionHistory: ${error.message}`);
     }
   }
 
   async findByProject(projectId: number): Promise<ActionHistory[]> {
+    this.logger.info('Retrieving ActionHistory entries for project', {
+      projectId,
+    });
+
     try {
-      return await this.repository.findByProject(projectId);
+      const actionHistories = await this.repository.findByProject(projectId);
+      this.logger.info('ActionHistory entries retrieved successfully', {
+        projectId,
+        count: actionHistories.length,
+      });
+
+      return actionHistories;
     } catch (error) {
+      this.logger.error(
+        'Failed to retrieve ActionHistory entries for project',
+        {
+          projectId,
+          error: error.message,
+        },
+      );
       throw new Error(
         `Failed to retrieve ActionHistory for Project ID ${projectId}: ${error.message}`,
       );

@@ -27,9 +27,9 @@ export class RoleRepository extends BaseCrudRepository<Role> {
 
   private async findRole(where: Record<string, any>): Promise<RoleName | null> {
     const role = await this.repository.findOne({
-      where,
+      where: { user: { id: where.user.id }, project: { id: where.project.id } },
       select: ['id', 'role'],
     });
-    return role.role;
+    return role ? role.role : null;
   }
 }

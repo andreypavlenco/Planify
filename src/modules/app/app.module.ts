@@ -12,9 +12,11 @@ import { DataBaseModule } from 'src/database/database.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ActionHistoryModule } from '../action-history/action-history.module';
+import { LoggerModule } from 'src/logger/logger.module.';
 
 @Module({
   imports: [
+    LoggerModule,
     ActionHistoryModule,
     RoleModule,
     UserModule,

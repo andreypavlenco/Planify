@@ -6,23 +6,39 @@ import {
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { IS_PUBLIC_KEY } from 'src/common/decorators';
+import { WinstonLoggerService } from 'src/logger/winston-logger.service';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  constructor(private readonly reflector: Reflector) {
+  constructor(
+    private readonly reflector: Reflector,
+    private readonly logger: WinstonLoggerService,
+  ) {
     super();
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request = context.switchToHttp().getRequest();
+    const { method, url } = request;
+
     const isPublic = this.isRoutePublic(context);
     if (isPublic) {
-      console.debug('Public route accessed');
+      this.logger.info('Public route accessed', { method, url });
       return true;
     }
 
     try {
-      return super.canActivate(context) as Promise<boolean>;
+      this.logger.info('Authenticating request', { method, url });
+      const result = (await super.canActivate(context)) as boolean;
+      this.logger.info('Authentication successful', { method, url });
+
+      return result;
     } catch (error) {
+      this.logger.error('Authentication failed', {
+        method,
+        url,
+        error: error.message,
+      });
       throw new UnauthorizedException(
         'Authentication failed. Please log in again.',
       );
@@ -30,11 +46,12 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   private isRoutePublic(context: ExecutionContext): boolean {
-    return (
-      this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
-        context.getHandler(),
-        context.getClass(),
-      ]) || false
-    );
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    this.logger.debug('Checked if route is public', { isPublic });
+
+    return isPublic || false;
   }
 }

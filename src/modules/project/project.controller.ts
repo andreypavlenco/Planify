@@ -18,6 +18,7 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { ProjectStatus, RoleName } from 'src/common/enums';
 import { RoleGuard } from '../auth/guards/role.guard';
 import { Roles, User } from 'src/common/decorators';
+import { DeleteResult } from 'typeorm';
 
 @Controller('projects')
 export class ProjectController {
@@ -41,27 +42,29 @@ export class ProjectController {
   @Roles(RoleName.ADMIN, RoleName.MANAGER)
   @UseGuards(RoleGuard)
   @HttpCode(HttpStatus.OK)
-  @Put(':id')
+  @Put(':progectId')
   async update(
-    @Param('id') id: number,
+    @Param('projectId') projectId: number,
     @Body() dto: UpdateProjectDto,
   ): Promise<Project> {
-    return this.projectService.update(id, dto);
+    return this.projectService.update(projectId, dto);
   }
 
   @Roles(RoleName.ADMIN, RoleName.MANAGER)
   @UseGuards(RoleGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Delete(':id')
-  async remove(@Param('id') id: number): Promise<void> {
-    return this.projectService.remove(id);
+  @Delete(':projectId')
+  async remove(@Param('projectId') projectId: number): Promise<DeleteResult> {
+    return this.projectService.remove(projectId);
   }
 
   @Roles(RoleName.ADMIN, RoleName.MANAGER)
   @UseGuards(RoleGuard)
-  @Get(':id/details')
-  async getProjectDetails(@Param('id') id: number): Promise<Project> {
-    return this.projectService.findProjectWithUsersAndTasks(id);
+  @Get(':projectId/details')
+  async getProjectDetails(
+    @Param('projectId') projectId: number,
+  ): Promise<Project> {
+    return this.projectService.findProjectWithUsersAndTasks(projectId);
   }
 
   @Roles(RoleName.ADMIN, RoleName.MANAGER)

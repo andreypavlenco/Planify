@@ -24,11 +24,10 @@ export class ProjectModule implements NestModule {
     consumer
       .apply(ExtractProjectIdMiddleware)
       .forRoutes(
-        { path: 'projects/:id', method: RequestMethod.PUT },
-        { path: 'projects/:id', method: RequestMethod.DELETE },
-        { path: 'projects/:id/details', method: RequestMethod.GET },
+        { path: 'projects/:projectId', method: RequestMethod.PUT },
+        { path: 'projects/:projectId', method: RequestMethod.DELETE },
+        { path: 'projects/:projectId/details', method: RequestMethod.GET },
         { path: 'projects/:id', method: RequestMethod.GET },
-        { path: 'projects/:projectId/tasks', method: RequestMethod.POST },
       );
   }
 }
