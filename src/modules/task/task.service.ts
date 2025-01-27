@@ -13,7 +13,7 @@ import { ActionHistoryService } from '../action-history/action-history.service';
 import { DeleteResult } from 'typeorm';
 import { Project } from 'src/entities/project.entity';
 import { User } from 'src/entities/user.entity';
-import { WinstonLoggerService } from 'src/core/utils/logger';
+import { WinstonLoggerService } from 'src/shared/utils/logger';
 import { TaskGateway } from 'src/websocket/task.gateway';
 import { ACTIONS } from 'src/common/constants/actions';
 import { ERROR_MESSAGES } from 'src/common/constants';

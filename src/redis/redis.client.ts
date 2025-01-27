@@ -1,7 +1,7 @@
 import { Injectable, OnApplicationShutdown } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
-import { WinstonLoggerService } from 'src/core/utils/logger';
+import { WinstonLoggerService } from 'src/shared/utils/logger';
 
 @Injectable()
 export class RedisClient implements OnApplicationShutdown {

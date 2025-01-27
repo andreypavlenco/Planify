@@ -5,7 +5,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { WinstonLoggerService } from 'src/core/utils/logger';
+import { WinstonLoggerService } from 'src/shared/utils/logger';
 import { RoleService } from 'src/modules/role/role.service';
 
 @Injectable()
@@ -39,6 +39,7 @@ export class RoleGuard implements CanActivate {
       userId,
       role: globalRole,
     });
+
     return globalRole;
   }
 
@@ -54,6 +55,7 @@ export class RoleGuard implements CanActivate {
       userRole,
       isAuthorized,
     });
+
     return isAuthorized;
   }
 
@@ -66,7 +68,6 @@ export class RoleGuard implements CanActivate {
       this.logger.info('No roles required for this route');
       return true;
     }
-
     const request = context.switchToHttp().getRequest();
     const { user, projectId } = request;
 
@@ -95,7 +96,6 @@ export class RoleGuard implements CanActivate {
           'You do not have the required permissions to access this resource.',
         );
       }
-
       this.logger.info('Access granted', {
         userId: user.id,
         projectId,
