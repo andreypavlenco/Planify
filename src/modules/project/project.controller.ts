@@ -24,7 +24,7 @@ import { ProjectService } from './project.service';
 import { Project } from 'src/entities/project.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
-import { ProjectStatus, RoleName } from 'src/common/enums';
+import { ProjectStatus, RoleName } from 'src/shared/enums';
 import { RoleGuard } from '../auth/guards/role.guard';
 import { Roles, User } from 'src/common/decorators';
 import { DeleteResult } from 'typeorm';

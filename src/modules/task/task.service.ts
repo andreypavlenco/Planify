@@ -7,18 +7,18 @@ import { Task } from 'src/entities/task.entity';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskRepository } from './repository/task.repository';
-import { TaskStatus } from 'src/common/enums';
-import { ERROR_MESSAGES } from 'src/common/constants/error-messages';
-import { handleHttpException } from 'src/common/exceptions/handle-http.exception';
 import { ProjectService } from '../project/project.service';
 import { UserService } from '../user/user.service';
 import { ActionHistoryService } from '../action-history/action-history.service';
-import { ACTIONS } from 'src/common/constants/actions';
 import { DeleteResult } from 'typeorm';
-import { WinstonLoggerService } from 'src/logger/winston-logger.service';
-import { TaskGateway } from './task.gateway';
 import { Project } from 'src/entities/project.entity';
 import { User } from 'src/entities/user.entity';
+import { WinstonLoggerService } from 'src/core/utils/logger';
+import { TaskGateway } from 'src/websocket/task.gateway';
+import { ACTIONS } from 'src/common/constants/actions';
+import { ERROR_MESSAGES } from 'src/common/constants';
+import { TaskStatus } from 'src/shared/enums';
+import { handleHttpException } from 'src/shared/exceptions';
 
 @Injectable()
 export class TaskService {

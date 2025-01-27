@@ -9,7 +9,7 @@ import { ApiTags, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { ActionHistoryService } from './action-history.service';
 import { RoleGuard } from '../auth/guards/role.guard';
 import { Roles } from 'src/common/decorators';
-import { RoleName } from 'src/common/enums';
+import { RoleName } from 'src/shared/enums';
 
 @ApiTags('Action History')
 @Controller('projects/:projectId/history')

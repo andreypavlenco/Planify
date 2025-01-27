@@ -4,7 +4,7 @@ import { ActionHistory } from 'src/entities/action-history.entity';
 import { Task } from 'src/entities/task.entity';
 import { User } from 'src/entities/user.entity';
 import { Project } from 'src/entities/project.entity';
-import { WinstonLoggerService } from 'src/logger/winston-logger.service';
+import { WinstonLoggerService } from 'src/core/utils/logger';
 
 @Injectable()
 export class ActionHistoryService {

@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateProjectDto } from './create-project.dto';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { ProjectStatus } from 'src/common/enums';
+import { ProjectStatus } from 'src/shared/enums';
 
 export class UpdateProjectDto extends PartialType(CreateProjectDto) {
   @ApiPropertyOptional({

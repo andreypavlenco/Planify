@@ -6,7 +6,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { IS_PUBLIC_KEY } from 'src/common/decorators';
-import { WinstonLoggerService } from 'src/logger/winston-logger.service';
+import { WinstonLoggerService } from 'src/core/utils/logger';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {

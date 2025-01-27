@@ -5,11 +5,10 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import { ActionHistoryService } from './action-history.service';
-import { ActionHistoryProviders } from 'src/common/providers/action-history.providers';
 import { DataBaseModule } from 'src/database/database.module';
 import { ActionHistoryRepository } from './repository/action-history.repository';
 import { ExtractProjectIdMiddleware } from 'src/common/middlewares';
-import { WinstonLoggerService } from 'src/logger/winston-logger.service';
+import { ActionHistoryProviders } from 'src/database/providers';
 
 @Module({
   imports: [DataBaseModule],
@@ -17,7 +16,6 @@ import { WinstonLoggerService } from 'src/logger/winston-logger.service';
     ...ActionHistoryProviders,
     ActionHistoryRepository,
     ActionHistoryService,
-    WinstonLoggerService,
   ],
   exports: [ActionHistoryService],
 })

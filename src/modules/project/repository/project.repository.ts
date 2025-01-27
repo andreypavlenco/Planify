@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { BaseCrudRepository } from 'src/common/repositories/base-crud.repository';
+import { PROVIDER_TOKENS } from 'src/common/constants';
+import { BaseCrudRepository } from 'src/common/repositories';
 import { Project } from 'src/entities/project.entity';
-import { ProjectStatus } from 'src/common/enums';
+import { ProjectStatus } from 'src/shared/enums';
 import { FindManyOptions, Repository } from 'typeorm';
-import { PROVIDER_TOKENS } from 'src/common/constants/provider.tokens';
 
 @Injectable()
 export class ProjectRepository extends BaseCrudRepository<Project> {

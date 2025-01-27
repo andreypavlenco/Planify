@@ -1,7 +1,7 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { validateOrReject } from 'class-validator';
-import { ReqUserDto } from '../dto';
+import { ReqUserDto } from '../../shared/dto';
 
 export const User = createParamDecorator(
   async (data: unknown, ctx: ExecutionContext) => {

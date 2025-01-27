@@ -1,8 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Like, Repository } from 'typeorm';
 import { User } from 'src/entities/user.entity';
-import { BaseCrudRepository } from 'src/common/repositories/base-crud.repository';
-import { PROVIDER_TOKENS } from 'src/common/constants/provider.tokens';
+import { BaseCrudRepository } from 'src/common/repositories';
+import { PROVIDER_TOKENS } from 'src/common/constants';
 
 @Injectable()
 export class UserRepository extends BaseCrudRepository<User> {

@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { Task } from './task.entity';
 import { User } from './user.entity';
-import { ProjectStatus } from 'src/common/enums';
+import { ProjectStatus } from 'src/shared/enums';
 import { Role } from './role.entity';
 import { ActionHistory } from './action-history.entity';
 

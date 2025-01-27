@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { BaseCrudRepository } from 'src/common/repositories/base-crud.repository';
+import { PROVIDER_TOKENS } from 'src/common/constants';
+import { BaseCrudRepository } from 'src/common/repositories';
 import { Task } from 'src/entities/task.entity';
-import { TaskStatus } from 'src/common/enums';
+import { TaskStatus } from 'src/shared/enums';
 import { FindManyOptions, Repository } from 'typeorm';
-import { PROVIDER_TOKENS } from 'src/common/constants/provider.tokens';
 
 @Injectable()
 export class TaskRepository extends BaseCrudRepository<Task> {
@@ -14,14 +14,14 @@ export class TaskRepository extends BaseCrudRepository<Task> {
     super(repository);
   }
 
-  findOneWithUsersAndTasks(
+  async findOneWithUsersAndTasks(
     id: number,
     relations: string[] = [],
   ): Promise<Task> {
     return this.findById(id, relations);
   }
 
-  findWithFilters(
+  async findWithFilters(
     sortDate: 'ASC' | 'DESC' = 'ASC',
     status?: TaskStatus,
   ): Promise<Task[]> {

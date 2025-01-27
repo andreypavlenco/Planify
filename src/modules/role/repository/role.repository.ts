@@ -1,9 +1,9 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { BaseCrudRepository } from 'src/common/repositories/base-crud.repository';
+import { BaseCrudRepository } from 'src/common/repositories';
+import { PROVIDER_TOKENS } from 'src/common/constants';
+import { RoleName } from 'src/shared/enums';
 import { Role } from 'src/entities/role.entity';
-import { PROVIDER_TOKENS } from 'src/common/providers';
-import { RoleName } from 'src/common/enums';
 
 @Injectable()
 export class RoleRepository extends BaseCrudRepository<Role> {

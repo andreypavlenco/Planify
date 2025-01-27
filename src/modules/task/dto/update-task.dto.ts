@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { CreateTaskDto } from './create-task.dto';
-import { TaskStatus } from 'src/common/enums';
+import { TaskStatus } from 'src/shared/enums';
 
 export class UpdateTaskDto extends PartialType(CreateTaskDto) {
   @ApiPropertyOptional({

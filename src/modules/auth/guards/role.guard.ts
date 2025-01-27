@@ -5,8 +5,8 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { WinstonLoggerService } from 'src/core/utils/logger';
 import { RoleService } from 'src/modules/role/role.service';
-import { WinstonLoggerService } from 'src/logger/winston-logger.service';
 
 @Injectable()
 export class RoleGuard implements CanActivate {
