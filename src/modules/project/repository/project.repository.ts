@@ -34,6 +34,7 @@ export class ProjectRepository extends BaseCrudRepository<Project> {
       if (status) {
         options.where = { status };
       }
+
       return await this.repository.find(options);
     } catch (error) {
       throw new Error(

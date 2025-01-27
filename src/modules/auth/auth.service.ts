@@ -11,7 +11,7 @@ import { AuthTokens } from './types';
 import { RegisterAuthDto } from './dto/register-auth.dto';
 import { ERROR_MESSAGES } from 'src/common/constants';
 import { JwtTokenService } from './token/jwt-token.service';
-import { WinstonLoggerService } from 'src/core/utils/logger';
+import { WinstonLoggerService } from 'src/shared/utils/logger';
 import { handleHttpException } from 'src/shared/exceptions';
 
 @Injectable()
@@ -44,7 +44,6 @@ export class AuthService {
       await this.userService.updateUser(user.id, {
         refreshToken: hashedRefreshToken,
       });
-
       this.logger.info('Refresh token stored in the database', {
         userId: user.id,
       });

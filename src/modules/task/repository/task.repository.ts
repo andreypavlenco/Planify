@@ -32,6 +32,7 @@ export class TaskRepository extends BaseCrudRepository<Task> {
       where: status ? { status } : {},
       order: { createdAt: sortDate },
     };
+
     return this.repository.find(options);
   }
 }

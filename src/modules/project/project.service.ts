@@ -11,7 +11,7 @@ import { UserService } from '../user/user.service';
 import { RoleService } from '../role/role.service';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { DeleteResult } from 'typeorm';
-import { WinstonLoggerService } from 'src/core/utils/logger';
+import { WinstonLoggerService } from 'src/shared/utils/logger';
 import { handleHttpException } from 'src/shared/exceptions';
 import { ERROR_MESSAGES } from 'src/common/constants';
 
@@ -91,6 +91,7 @@ export class ProjectService {
         'users',
       ]);
       this.logger.info('Project retrieved successfully', { projectId: id });
+
       return project;
     } catch (error) {
       this.logger.error('Failed to retrieve project', {

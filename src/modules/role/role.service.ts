@@ -4,7 +4,7 @@ import { User } from 'src/entities/user.entity';
 import { Role } from 'src/entities/role.entity';
 import { Project } from 'src/entities/project.entity';
 import { RoleName } from 'src/shared/enums';
-import { WinstonLoggerService } from 'src/core/utils/logger';
+import { WinstonLoggerService } from 'src/shared/utils/logger';
 
 @Injectable()
 export class RoleService {

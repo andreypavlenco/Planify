@@ -10,7 +10,7 @@ import { RoleName } from 'src/shared/enums';
 import { RoleService } from '../role/role.service';
 import { Project } from 'src/entities/project.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { WinstonLoggerService } from 'src/core/utils/logger';
+import { WinstonLoggerService } from 'src/shared/utils/logger';
 import { handleHttpException } from 'src/shared/exceptions';
 import { ERROR_MESSAGES } from 'src/common/constants';
 

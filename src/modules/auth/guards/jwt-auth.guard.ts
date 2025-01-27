@@ -6,7 +6,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { IS_PUBLIC_KEY } from 'src/common/decorators';
-import { WinstonLoggerService } from 'src/core/utils/logger';
+import { WinstonLoggerService } from 'src/shared/utils/logger';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -26,7 +26,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       this.logger.info('Public route accessed', { method, url });
       return true;
     }
-
     try {
       this.logger.info('Authenticating request', { method, url });
       const result = (await super.canActivate(context)) as boolean;

@@ -4,7 +4,7 @@ import { ActionHistory } from 'src/entities/action-history.entity';
 import { Task } from 'src/entities/task.entity';
 import { User } from 'src/entities/user.entity';
 import { Project } from 'src/entities/project.entity';
-import { WinstonLoggerService } from 'src/core/utils/logger';
+import { WinstonLoggerService } from 'src/shared/utils/logger';
 
 @Injectable()
 export class ActionHistoryService {
@@ -38,6 +38,7 @@ export class ActionHistoryService {
         taskId: task.id,
         userId: user.id,
       });
+
       return actionHistory;
     } catch (error) {
       this.logger.error('Failed to create ActionHistory entry', {

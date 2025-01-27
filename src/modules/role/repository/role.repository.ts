@@ -31,6 +31,7 @@ export class RoleRepository extends BaseCrudRepository<Role> {
       where,
       select: ['id', 'role'],
     });
+
     return role ? role.role : null;
   }
 }
