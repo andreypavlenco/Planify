@@ -3,7 +3,7 @@ import {
   NotFoundException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { Project } from 'src/database/entities/project.entity';
+import { Project } from 'src/entities/project.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { ProjectRepository } from './repository/project.repository';
 import { ProjectStatus, RoleName } from 'src/shared/enums';

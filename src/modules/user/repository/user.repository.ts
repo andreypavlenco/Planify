@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Like, Repository } from 'typeorm';
-import { User } from 'src/database/entities/user.entity';
+import { User } from 'src/entities/user.entity';
 import { BaseCrudRepository } from 'src/common/repositories';
 import { PROVIDER_TOKENS } from 'src/common/constants';
 

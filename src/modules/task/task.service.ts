@@ -3,7 +3,7 @@ import {
   NotFoundException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { Task } from 'src/database/entities/task.entity';
+import { Task } from 'src/entities/task.entity';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskRepository } from './repository/task.repository';
@@ -11,8 +11,8 @@ import { ProjectService } from '../project/project.service';
 import { UserService } from '../user/user.service';
 import { ActionHistoryService } from '../action-history/action-history.service';
 import { DeleteResult } from 'typeorm';
-import { Project } from 'src/database/entities/project.entity';
-import { User } from 'src/database/entities/user.entity';
+import { Project } from 'src/entities/project.entity';
+import { User } from 'src/entities/user.entity';
 import { WinstonLoggerService } from 'src/core/utils/logger';
 import { TaskGateway } from 'src/websocket/task.gateway';
 import { ACTIONS } from 'src/common/constants/actions';

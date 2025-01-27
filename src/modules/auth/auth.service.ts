@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { UserService } from '../user/user.service';
-import { User } from 'src/database/entities/user.entity';
+import { User } from 'src/entities/user.entity';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { AuthTokens } from './types';
 import { RegisterAuthDto } from './dto/register-auth.dto';

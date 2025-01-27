@@ -1,8 +1,8 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { RoleRepository } from './repository/role.repository';
-import { User } from 'src/database/entities/user.entity';
-import { Role } from 'src/database/entities/role.entity';
-import { Project } from 'src/database/entities/project.entity';
+import { User } from 'src/entities/user.entity';
+import { Role } from 'src/entities/role.entity';
+import { Project } from 'src/entities/project.entity';
 import { RoleName } from 'src/shared/enums';
 import { WinstonLoggerService } from 'src/core/utils/logger';
 

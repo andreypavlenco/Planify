@@ -10,7 +10,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { WinstonLoggerService } from 'src/core/utils/logger';
-import { Task } from 'src/database/entities/task.entity';
+import { Task } from 'src/entities/task.entity';
 
 @WebSocketGateway({
   cors: {

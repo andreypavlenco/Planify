@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ActionHistoryRepository } from './repository/action-history.repository';
-import { ActionHistory } from 'src/database/entities/action-history.entity';
-import { Task } from 'src/database/entities/task.entity';
-import { User } from 'src/database/entities/user.entity';
-import { Project } from 'src/database/entities/project.entity';
+import { ActionHistory } from 'src/entities/action-history.entity';
+import { Task } from 'src/entities/task.entity';
+import { User } from 'src/entities/user.entity';
+import { Project } from 'src/entities/project.entity';
 import { WinstonLoggerService } from 'src/core/utils/logger';
 
 @Injectable()

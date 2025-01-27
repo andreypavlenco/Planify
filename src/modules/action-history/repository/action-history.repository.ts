@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PROVIDER_TOKENS } from 'src/common/constants';
 import { BaseCrudRepository } from 'src/common/repositories/base-crud.repository';
-import { ActionHistory } from 'src/database/entities/action-history.entity';
+import { ActionHistory } from 'src/entities/action-history.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()

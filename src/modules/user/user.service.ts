@@ -3,12 +3,12 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { User } from 'src/database/entities/user.entity';
+import { User } from 'src/entities/user.entity';
 import { UserRepository } from './repository/user.repository';
 import { CreateUserDto } from './dto/create-user.dto';
 import { RoleName } from 'src/shared/enums';
 import { RoleService } from '../role/role.service';
-import { Project } from 'src/database/entities/project.entity';
+import { Project } from 'src/entities/project.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { WinstonLoggerService } from 'src/core/utils/logger';
 import { handleHttpException } from 'src/shared/exceptions';

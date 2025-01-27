@@ -1,10 +1,10 @@
-import { ActionHistory } from 'src/database/entities/action-history.entity';
+import { ActionHistory } from 'src/entities/action-history.entity';
 import { PROVIDER_TOKENS } from '../../common/constants';
 import { createProvider } from 'src/database/providers/providers.factory';
-import { Project } from 'src/database/entities/project.entity';
-import { Role } from 'src/database/entities/role.entity';
-import { Task } from 'src/database/entities/task.entity';
-import { User } from 'src/database/entities/user.entity';
+import { Project } from 'src/entities/project.entity';
+import { Role } from 'src/entities/role.entity';
+import { Task } from 'src/entities/task.entity';
+import { User } from 'src/entities/user.entity';
 
 export const ActionHistoryProviders = [
   createProvider(PROVIDER_TOKENS.ACTION_HISTORY, ActionHistory),
