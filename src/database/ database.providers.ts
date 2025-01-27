@@ -9,7 +9,6 @@ export const databaseProviders = [
       const dataSource = new DataSource(
         typeOrmConfigService.createTypeOrmOptions(),
       );
-
       try {
         return await dataSource.initialize();
       } catch (error) {

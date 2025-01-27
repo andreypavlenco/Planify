@@ -38,14 +38,12 @@ export class JwtTokenService {
       expiresIn: this.accessTokenExpiry,
     });
   }
-
   generateRefreshToken(payload: AuthPayload): string {
     return this.jwtService.sign(payload, {
       secret: this.refreshTokenSecret,
       expiresIn: this.refreshTokenExpiry,
     });
   }
-
   async generateTokens(payload: AuthPayload): Promise<AuthTokens> {
     const accessToken = this.generateAccessToken(payload);
     const refreshToken = this.generateRefreshToken(payload);
