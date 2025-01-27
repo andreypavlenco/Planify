@@ -51,7 +51,6 @@ docker-compose up --build
 
 Once everything is running, the application will be accessible at:
 
-- **Frontend URL**: [http://localhost:3000](http://localhost:3000)
 - **API Base URL**: [http://localhost:3000/api](http://localhost:3000/api)
 
 ---
