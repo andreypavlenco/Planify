@@ -42,4 +42,11 @@ export class ProjectRepository extends BaseCrudRepository<Project> {
       );
     }
   }
+
+  async findProjectWithUsers(id: number): Promise<Project> {
+    return this.repository.findOne({
+      where: { id },
+      relations: ['users'],
+    });
+  }
 }

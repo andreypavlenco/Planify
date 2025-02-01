@@ -14,6 +14,7 @@ import { DeleteResult } from 'typeorm';
 import { WinstonLoggerService } from 'src/shared/utils/logger';
 import { handleHttpException } from 'src/shared/exceptions';
 import { ERROR_MESSAGES } from 'src/common/constants';
+import { EmailService } from 'src/email/services/email.service';
 
 @Injectable()
 export class ProjectService {
@@ -22,6 +23,7 @@ export class ProjectService {
     private readonly userService: UserService,
     private readonly roleService: RoleService,
     private readonly logger: WinstonLoggerService,
+    private readonly emailService: EmailService,
   ) {}
 
   async create(dto: CreateProjectDto, userId: number): Promise<Project> {
@@ -165,7 +167,16 @@ export class ProjectService {
     this.logger.info('Updating project', { projectId: id, updateData: dto });
 
     try {
-      const project = await this.findById(id);
+      const project = await this.repository.findProjectWithUsers(id);
+
+      if (dto.status === ProjectStatus.COMPLETED) {
+        const emailUsers = project.users.map((user) => user.email);
+        await this.emailService.sendProjectNotification(
+          project.name,
+          emailUsers,
+        );
+      }
+
       const updatedProject = await this.repository.update({
         ...project,
         ...dto,

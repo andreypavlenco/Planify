@@ -114,4 +114,25 @@ export class RoleService {
       throw new InternalServerErrorException('Failed to create role');
     }
   }
+
+  async findProjectManagers(projectId: number) {
+    this.logger.log(`Fetching project managers for projectId: ${projectId}`);
+
+    try {
+      const managers = await this.repository.findProjectManagers(projectId);
+      this.logger.log(
+        `Found ${managers.length} project managers for projectId: ${projectId}`,
+      );
+
+      return managers;
+    } catch (error) {
+      this.logger.error(
+        `Error fetching project managers for projectId: ${projectId}`,
+        error.stack,
+      );
+      throw new InternalServerErrorException(
+        'Failed to fetch project managers.',
+      );
+    }
+  }
 }
