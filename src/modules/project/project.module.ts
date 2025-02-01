@@ -12,9 +12,10 @@ import { ProjectProviders } from 'src/database/providers';
 import { UserModule } from '../user/user.module';
 import { RoleModule } from '../role/role.module';
 import { ExtractProjectIdMiddleware } from 'src/common/middlewares';
+import { EmailModule } from 'src/email/email.module';
 
 @Module({
-  imports: [DataBaseModule, UserModule, RoleModule],
+  imports: [DataBaseModule, UserModule, RoleModule, EmailModule],
   controllers: [ProjectController],
   providers: [ProjectService, ...ProjectProviders, ProjectRepository],
   exports: [ProjectService],

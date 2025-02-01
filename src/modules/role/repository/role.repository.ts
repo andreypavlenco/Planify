@@ -26,12 +26,21 @@ export class RoleRepository extends BaseCrudRepository<Role> {
   }
 
   private async findRole(where: Record<string, any>): Promise<RoleName | null> {
-    console.log('where', where);
     const role = await this.repository.findOne({
       where,
       select: ['id', 'role'],
     });
 
     return role ? role.role : null;
+  }
+
+  async findProjectManagers(projectId: number) {
+    return this.repository.find({
+      where: {
+        project: { id: projectId },
+        role: RoleName.MANAGER,
+      },
+      relations: ['user'],
+    });
   }
 }

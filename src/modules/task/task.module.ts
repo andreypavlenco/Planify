@@ -16,18 +16,26 @@ import { ActionHistoryModule } from '../action-history/action-history.module';
 import { ExtractProjectIdMiddleware } from 'src/common/middlewares';
 import { JwtModule } from '@nestjs/jwt';
 import { TaskGateway } from 'src/websocket/task.gateway';
+import { EmailModule } from 'src/email/email.module';
 
 @Module({
   imports: [
     DataBaseModule,
     RoleModule,
+    EmailModule,
     UserModule,
     ProjectModule,
     ActionHistoryModule,
     JwtModule,
   ],
   controllers: [TaskController],
-  providers: [TaskService, ...TaskProviders, TaskRepository, TaskGateway],
+  providers: [
+    TaskService,
+    ...TaskProviders,
+    TaskRepository,
+    TaskGateway,
+    EmailModule,
+  ],
 })
 export class TaskModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
