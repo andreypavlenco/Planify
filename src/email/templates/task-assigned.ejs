@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Task Assigned</title>
+</head>
+<body style="margin: 0; padding: 20px; font-family: Arial, sans-serif; background-color: #f8f9fa;">
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f8f9fa; padding: 20px;">
+        <tr>
+            <td align="center">
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                    <tr>
+                        <td align="center" style="padding: 20px 0;">
+                            <h1 style="color: #333; font-size: 24px; margin: 0;">Hello, <%= taskName %>!</h1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 0; font-size: 16px; color: #555; line-height: 1.6;">
+                            You have been assigned a new task in the project "<strong><%= projectName %></strong>".
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; background: #f1f3f5; border-left: 4px solid #007bff; border-radius: 4px;">
+                            <p style="margin: 0; font-size: 16px;"><strong>Task Description:</strong> <%= taskDescription %></p>
+                            <p style="margin: 0; font-size: 16px;"><strong>Due Date:</strong> <%= dueDate %></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 20px 0; text-align: center;">
+                            <a href="https://your-task-link.com" style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; font-size: 16px; border-radius: 5px;">View Task</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 0; font-size: 16px; color: #555; line-height: 1.6;">
+                            Please ensure to complete this task by the specified deadline. If you have any questions, feel free to contact the project manager.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" style="padding-top: 20px; font-size: 14px; color: #888;">
+                            <p>Thank you for your efforts!<br>The Project Team</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
