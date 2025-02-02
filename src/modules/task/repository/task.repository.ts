@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PROVIDER_TOKENS } from 'src/common/constants';
 import { BaseCrudRepository } from 'src/common/repositories';
+import { Project } from 'src/entities/project.entity';
 import { Task } from 'src/entities/task.entity';
 import { TaskStatus } from 'src/shared/enums';
 import { FindManyOptions, Repository } from 'typeorm';

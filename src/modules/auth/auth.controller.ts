@@ -4,9 +4,10 @@ import { AuthService } from './auth.service';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { RegisterAuthDto } from './dto/register-auth.dto';
 import { Public } from '../../common/decorators';
+import { AUTH_CONTROLLER, AUTH_ROUTES } from './constants';
 
 @ApiTags('Auth')
-@Controller('auth')
+@Controller(AUTH_CONTROLLER)
 export class AuthController {
   constructor(private authService: AuthService) {}
 
@@ -28,9 +29,9 @@ export class AuthController {
   @ApiBody({ type: LoginAuthDto })
   @Public()
   @HttpCode(HttpStatus.OK)
-  @Post('login')
-  login(@Body() dto: LoginAuthDto) {
-    return this.authService.login(dto);
+  @Post(AUTH_ROUTES.SIGN_IN)
+  singIn(@Body() dto: LoginAuthDto) {
+    return this.authService.singIn(dto);
   }
 
   @ApiOperation({ summary: 'Register user' })
@@ -52,8 +53,8 @@ export class AuthController {
   @ApiBody({ type: RegisterAuthDto })
   @Public()
   @HttpCode(HttpStatus.OK)
-  @Post('register')
-  register(@Body() dto: RegisterAuthDto) {
-    return this.authService.register(dto);
+  @Post(AUTH_ROUTES.SIGN_UP)
+  singUp(@Body() dto: RegisterAuthDto) {
+    return this.authService.singUp(dto);
   }
 }

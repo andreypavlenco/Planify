@@ -10,9 +10,10 @@ import { ActionHistoryService } from './action-history.service';
 import { RoleGuard } from '../auth/guards/role.guard';
 import { Roles } from 'src/common/decorators';
 import { RoleName } from 'src/shared/enums';
+import { ACTION_HISTORY_CONTROLLER, ACTION_HISTORY_ROUTES } from './constants';
 
 @ApiTags('Action History')
-@Controller('projects/:projectId/history')
+@Controller(ACTION_HISTORY_CONTROLLER)
 export class ActionHistoryController {
   constructor(private readonly actionHistoryService: ActionHistoryService) {}
 
@@ -42,7 +43,7 @@ export class ActionHistoryController {
   })
   @Roles(RoleName.ADMIN, RoleName.MANAGER)
   @UseGuards(RoleGuard)
-  @Get()
+  @Get(ACTION_HISTORY_ROUTES.GET_HISTORY)
   async getActionHistory(@Param('projectId', ParseIntPipe) projectId: number) {
     return this.actionHistoryService.findByProject(projectId);
   }

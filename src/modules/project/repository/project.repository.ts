@@ -55,4 +55,11 @@ export class ProjectRepository extends BaseCrudRepository<Project> {
       status: ProjectStatus.COMPLETED,
     });
   }
+
+  async fetchTaskSummary(projectId: number): Promise<Project> {
+    return this.repository.findOne({
+      where: { id: projectId },
+      relations: ['tasks', 'tasks.assignee'],
+    });
+  }
 }
