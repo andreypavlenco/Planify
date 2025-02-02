@@ -24,7 +24,7 @@ export class AuthService {
     private readonly logger: WinstonLoggerService,
   ) {}
 
-  async login(dto: LoginAuthDto): Promise<AuthTokens> {
+  async singIn(dto: LoginAuthDto): Promise<AuthTokens> {
     try {
       this.logger.info('Login attempt started', { email: dto.email });
 
@@ -55,7 +55,7 @@ export class AuthService {
     }
   }
 
-  async register(dto: RegisterAuthDto): Promise<AuthTokens> {
+  async singUp(dto: RegisterAuthDto): Promise<AuthTokens> {
     try {
       this.logger.info('Registration attempt started', { email: dto.email });
 

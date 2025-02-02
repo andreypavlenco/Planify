@@ -3,6 +3,7 @@ import { Like, Repository } from 'typeorm';
 import { User } from 'src/entities/user.entity';
 import { BaseCrudRepository } from 'src/common/repositories';
 import { PROVIDER_TOKENS } from 'src/common/constants';
+import { Project } from 'src/entities/project.entity';
 
 @Injectable()
 export class UserRepository extends BaseCrudRepository<User> {
@@ -56,7 +57,6 @@ export class UserRepository extends BaseCrudRepository<User> {
   }
 
   async emailExists(email: string): Promise<boolean> {
-    const emailExists = await this.repository.exists({ where: { email } });
-    return emailExists;
+    return this.repository.exists({ where: { email } });
   }
 }

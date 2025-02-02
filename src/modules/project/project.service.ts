@@ -58,7 +58,6 @@ export class ProjectService {
         userId: user.id,
         role: RoleName.MANAGER,
       });
-
       return project;
     } catch (error) {
       this.logger.error('Project creation failed', { error: error.message });
@@ -185,10 +184,8 @@ export class ProjectService {
         );
       }
 
-      const updatedProject = await this.repository.update({
-        ...project,
-        ...dto,
-      });
+      Object.assign(project, dto);
+      const updatedProject = await this.repository.update(project);
       if (!updatedProject) {
         this.logger.warn('Failed to update project - Not Found', {
           projectId: id,

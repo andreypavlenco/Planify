@@ -208,7 +208,8 @@ export class TaskService {
         );
       }
 
-      const updatedTask = await this.repository.update({ ...task, ...dto });
+      Object.assign(task, dto);
+      const updatedTask = await this.repository.update(task);
       this.logger.info('Task successfully updated', { taskId: id });
 
       updates.push(ACTIONS.TASK.UPDATED);

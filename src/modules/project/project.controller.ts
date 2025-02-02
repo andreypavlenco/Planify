@@ -28,10 +28,11 @@ import { ProjectStatus, RoleName } from 'src/shared/enums';
 import { RoleGuard } from '../auth/guards/role.guard';
 import { Roles, User } from 'src/common/decorators';
 import { DeleteResult } from 'typeorm';
+import { PROJECT_CONTROLLER, PROJECT_ROUTES } from './constants';
 
 @ApiTags('Projects')
 @ApiBearerAuth()
-@Controller('projects')
+@Controller(PROJECT_CONTROLLER)
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
@@ -46,7 +47,7 @@ export class ProjectController {
   @Roles(RoleName.ADMIN, RoleName.MANAGER, RoleName.USER)
   @UseGuards(RoleGuard)
   @HttpCode(HttpStatus.CREATED)
-  @Post()
+  @Post(PROJECT_ROUTES.CREATE)
   async create(@Body() dto: CreateProjectDto, @User() user): Promise<Project> {
     return this.projectService.create(dto, user.id);
   }
@@ -64,8 +65,8 @@ export class ProjectController {
   @ApiParam({ name: 'id', type: Number, description: 'Project ID' })
   @Roles(RoleName.ADMIN, RoleName.MANAGER, RoleName.USER)
   @UseGuards(RoleGuard)
-  @Get(':id')
-  async findOne(@Param('id') id: number): Promise<Project> {
+  @Get(PROJECT_ROUTES.GET_BY_ID)
+  async findById(@Param('id') id: number): Promise<Project> {
     return this.projectService.findById(id);
   }
 
@@ -84,7 +85,7 @@ export class ProjectController {
   @Roles(RoleName.ADMIN, RoleName.MANAGER)
   @UseGuards(RoleGuard)
   @HttpCode(HttpStatus.OK)
-  @Put(':projectId')
+  @Put(PROJECT_ROUTES.UPDATE)
   async update(
     @Param('projectId') projectId: number,
     @Body() dto: UpdateProjectDto,
@@ -123,7 +124,7 @@ export class ProjectController {
   @ApiParam({ name: 'projectId', type: Number, description: 'Project ID' })
   @Roles(RoleName.ADMIN, RoleName.MANAGER)
   @UseGuards(RoleGuard)
-  @Get(':projectId/details')
+  @Get(PROJECT_ROUTES.DETAILS)
   async getProjectDetails(
     @Param('projectId') projectId: number,
   ): Promise<Project> {
@@ -151,7 +152,7 @@ export class ProjectController {
   })
   @Roles(RoleName.ADMIN, RoleName.MANAGER)
   @UseGuards(RoleGuard)
-  @Get()
+  @Get(PROJECT_ROUTES.FILTER)
   async getFilteredProjects(
     @Query('sortDate') sortDate: 'ASC' | 'DESC' = 'ASC',
     @Query('status') status?: ProjectStatus,

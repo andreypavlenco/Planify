@@ -146,11 +146,10 @@ export class UserService {
 
   async updateUser(id: number, dto: UpdateUserDto): Promise<User> {
     this.logger.info('Updating user', { userId: id, updates: dto });
-
     try {
       const user = await this.findById(id);
-      const updatedUser = { ...user, ...dto };
-      const savedUser = await this.repository.saveEntity(updatedUser);
+      Object.assign(user, dto);
+      const savedUser = await this.repository.update(user);
       this.logger.info('User updated successfully', { userId: id });
 
       return savedUser;

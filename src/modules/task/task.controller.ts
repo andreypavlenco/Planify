@@ -30,10 +30,11 @@ import { Roles, User } from 'src/common/decorators';
 import { RoleGuard } from '../auth/guards/role.guard';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { DeleteResult } from 'typeorm';
+import { TASK_CONTROLLER, TASK_ROUTES } from './constants';
 
 @ApiTags('Tasks')
 @ApiBearerAuth()
-@Controller('projects/:projectId/tasks')
+@Controller(TASK_CONTROLLER)
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
@@ -57,7 +58,7 @@ export class TaskController {
   @Roles(RoleName.ADMIN, RoleName.MANAGER)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @HttpCode(HttpStatus.OK)
-  @Post()
+  @Post(TASK_ROUTES.CREATE)
   create(
     @Param('projectId', ParseIntPipe) projectId: number,
     @User() user,
@@ -76,7 +77,7 @@ export class TaskController {
   @ApiParam({ name: 'id', type: Number, description: 'ID of the task' })
   @Roles(RoleName.ADMIN, RoleName.MANAGER, RoleName.USER)
   @UseGuards(RoleGuard)
-  @Get(':id')
+  @Get(TASK_ROUTES.GET_BY_ID)
   findOne(@Param('id') id: number): Promise<Task> {
     return this.taskService.findById(id);
   }
@@ -92,7 +93,7 @@ export class TaskController {
   @ApiBody({ type: UpdateTaskDto, description: 'Updated task data' })
   @Roles(RoleName.ADMIN, RoleName.MANAGER, RoleName.USER)
   @UseGuards(RoleGuard)
-  @Put(':id')
+  @Put(TASK_ROUTES.UPDATE)
   update(
     @Param('projectId', ParseIntPipe) projectId: number,
     @Param('id') id: number,
@@ -140,7 +141,7 @@ export class TaskController {
   })
   @Roles(RoleName.ADMIN, RoleName.MANAGER, RoleName.USER)
   @UseGuards(RoleGuard)
-  @Get()
+  @Get(TASK_ROUTES.FILTERED)
   async getTasks(
     @Query('sortDate') sortDate: string = 'ASC',
     @Query('status') status?: TaskStatus,

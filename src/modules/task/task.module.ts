@@ -17,6 +17,7 @@ import { ExtractProjectIdMiddleware } from 'src/common/middlewares';
 import { JwtModule } from '@nestjs/jwt';
 import { TaskGateway } from 'src/websocket/task.gateway';
 import { EmailModule } from 'src/modules/email/email.module';
+import { TASK_CONTROLLER, TASK_ROUTES } from './constants';
 
 @Module({
   imports: [
@@ -39,13 +40,23 @@ import { EmailModule } from 'src/modules/email/email.module';
 })
 export class TaskModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(ExtractProjectIdMiddleware)
-      .forRoutes(
-        { path: 'projects/:projectId/tasks', method: RequestMethod.POST },
-        { path: 'projects/:projectId/tasks', method: RequestMethod.GET },
-        { path: 'projects/:projectId/tasks/:id', method: RequestMethod.DELETE },
-        { path: 'projects/:projectId/tasks/:id', method: RequestMethod.PUT },
-      );
+    consumer.apply(ExtractProjectIdMiddleware).forRoutes(
+      {
+        path: `${TASK_CONTROLLER}/${TASK_ROUTES.CREATE}`,
+        method: RequestMethod.POST,
+      },
+      {
+        path: `${TASK_CONTROLLER}/${TASK_ROUTES.GET_BY_ID}`,
+        method: RequestMethod.GET,
+      },
+      {
+        path: `${TASK_CONTROLLER}/${TASK_ROUTES.DELETE}`,
+        method: RequestMethod.DELETE,
+      },
+      {
+        path: `${TASK_CONTROLLER}/${TASK_ROUTES.UPDATE}`,
+        method: RequestMethod.PUT,
+      },
+    );
   }
 }
