@@ -16,7 +16,7 @@ import { ActionHistoryModule } from '../action-history/action-history.module';
 import { ExtractProjectIdMiddleware } from 'src/common/middlewares';
 import { JwtModule } from '@nestjs/jwt';
 import { TaskGateway } from 'src/websocket/task.gateway';
-import { EmailModule } from 'src/email/email.module';
+import { EmailModule } from 'src/modules/email/email.module';
 
 @Module({
   imports: [

@@ -1,13 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
-
-interface WeatherResponse {
-  weather: Array<{ description: string }>;
-  main: { temp: number; pressure: number; humidity: number };
-  wind: { speed: number };
-  name: string;
-}
+import { WeatherResponse } from 'src/shared/type';
 
 @Injectable()
 export class WeatherAPIService {

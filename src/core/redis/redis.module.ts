@@ -1,14 +1,13 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { RedisClient } from './redis.client';
-import { RedisService } from '../core/services/redis.service';
 import { BullModule } from '@nestjs/bullmq';
-
+import { RedisService } from './redis.service';
 
 @Global()
 @Module({
   imports: [
-    BullmqModule.forRootAsync({
+    BullModule.forRootAsync({
       imports: [],
       inject: [RedisClient],
       useFactory: (redisClient: RedisClient) => ({

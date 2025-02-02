@@ -12,10 +12,20 @@ import { ProjectProviders } from 'src/database/providers';
 import { UserModule } from '../user/user.module';
 import { RoleModule } from '../role/role.module';
 import { ExtractProjectIdMiddleware } from 'src/common/middlewares';
-import { EmailModule } from 'src/email/email.module';
+import { EmailModule } from 'src/modules/email/email.module';
+import { BullModule } from '@nestjs/bullmq';
+import { DELETE_PROJECTS_COMPLETED_QUEUE } from 'src/common/constants';
 
 @Module({
-  imports: [DataBaseModule, UserModule, RoleModule, EmailModule],
+  imports: [
+    DataBaseModule,
+    UserModule,
+    RoleModule,
+    EmailModule,
+    BullModule.registerQueue({
+      name: DELETE_PROJECTS_COMPLETED_QUEUE,
+    }),
+  ],
   controllers: [ProjectController],
   providers: [ProjectService, ...ProjectProviders, ProjectRepository],
   exports: [ProjectService],

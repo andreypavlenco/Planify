@@ -24,6 +24,7 @@ export class RedisClient implements OnApplicationShutdown {
         host,
         port,
         db,
+        maxRetriesPerRequest: null,
       });
 
       RedisClient.instance.on('error', (error) => {

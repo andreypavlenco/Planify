@@ -3,7 +3,7 @@ import { PROVIDER_TOKENS } from 'src/common/constants';
 import { BaseCrudRepository } from 'src/common/repositories';
 import { Project } from 'src/entities/project.entity';
 import { ProjectStatus } from 'src/shared/enums';
-import { FindManyOptions, Repository } from 'typeorm';
+import { DeleteResult, FindManyOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class ProjectRepository extends BaseCrudRepository<Project> {
@@ -47,6 +47,12 @@ export class ProjectRepository extends BaseCrudRepository<Project> {
     return this.repository.findOne({
       where: { id },
       relations: ['users'],
+    });
+  }
+
+  async removeProjectCompleted(): Promise<DeleteResult> {
+    return this.repository.delete({
+      status: ProjectStatus.COMPLETED,
     });
   }
 }
