@@ -48,7 +48,6 @@ export class TaskService {
         this.userService.findById(userId),
         dto.assigneeId ? this.userService.findById(dto.assigneeId) : null,
       ]);
-      console.log(project, owner, assignee);
       this.logger.info('Project, owner, and assignee resolved', {
         projectId,
         ownerId: owner.id,

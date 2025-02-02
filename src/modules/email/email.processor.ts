@@ -17,8 +17,8 @@ export class EmailProcessor extends WorkerHost {
 
   async process(job: Job): Promise<void> {
     const { recipients, subject, template, context } = job.data;
-    console.log('job', job.data);
     this.logger.info(`Processing email job: ${job.id} for ${recipients}`);
+
     try {
       await this.mailerService.sendMail({
         to: recipients,
