@@ -7,7 +7,6 @@ import { WinstonLoggerService } from 'src/shared/utils/logger';
 import { WeatherResponse } from '../../shared/type';
 import { RedisService } from 'src/core/redis';
 
-
 @Processor(GET_WEATHER_QUEUE)
 @Injectable()
 export class WeatherProcessor extends WorkerHost {
