@@ -13,8 +13,14 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { DeleteResult } from 'typeorm';
 import { WinstonLoggerService } from 'src/shared/utils/logger';
 import { handleHttpException } from 'src/shared/exceptions';
-import { ERROR_MESSAGES } from 'src/common/constants';
-import { EmailService } from 'src/email/services/email.service';
+import {
+  DELETE_PROJECTS_COMPLETED_QUEUE,
+  ERROR_MESSAGES,
+} from 'src/common/constants';
+import { EmailService } from 'src/modules/email/email.service';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 
 @Injectable()
 export class ProjectService {
@@ -24,6 +30,8 @@ export class ProjectService {
     private readonly roleService: RoleService,
     private readonly logger: WinstonLoggerService,
     private readonly emailService: EmailService,
+    @InjectQueue(DELETE_PROJECTS_COMPLETED_QUEUE)
+    private readonly projectQueue: Queue,
   ) {}
 
   async create(dto: CreateProjectDto, userId: number): Promise<Project> {
@@ -222,5 +230,13 @@ export class ProjectService {
         `${ERROR_MESSAGES.PROJECT.DELETE_FAILED}: ${error.message}`,
       );
     }
+  }
+
+  @Cron(CronExpression.EVERY_MINUTE)
+  async removeProjectCompleted(): Promise<void> {
+    await this.projectQueue.add('remove-project', {
+      delay: 60000,
+      priority: 3,
+    });
   }
 }

@@ -11,8 +11,9 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { ActionHistoryModule } from './modules/action-history/action-history.module';
 import { LoggerModule } from 'src/shared/utils/logger/logger.module.';
 import { WeatherModule } from './modules/weather-api/weather.module';
-import { RedisModule } from 'src/redis/redis.module';
-import { EmailModule } from './email/email.module';
+import { RedisModule } from 'src/core/redis/redis.module';
+import { EmailModule } from './modules/email/email.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { EmailModule } from './email/email.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    ScheduleModule.forRoot(),
     RedisModule,
     DataBaseModule,
     AuthModule,

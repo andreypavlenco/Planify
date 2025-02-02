@@ -21,7 +21,9 @@
                     </tr>
                     <tr>
                         <td style="padding: 10px; background: #f1f3f5; border-left: 4px solid #007bff; border-radius: 4px;">
-                            <p style="margin: 0; font-size: 16px;"><strong>Task Description:</strong> <%= taskDescription %></p>
+                            <% if (taskDescription) { %>
+                                <p><strong>Task Description:</strong> <%= taskDescription %></p>
+                              <% } %>
                             <p style="margin: 0; font-size: 16px;"><strong>Due Date:</strong> <%= dueDate %></p>
                         </td>
                     </tr>

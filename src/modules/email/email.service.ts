@@ -1,34 +1,48 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { MailerService } from '@nestjs-modules/mailer';
+import { Injectable } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 import { WinstonLoggerService } from 'src/shared/utils/logger';
+import { SEND_EMAIL_QUEUE } from 'src/common/constants/redis.queue';
+import { format } from 'date-fns';
 
 @Injectable()
 export class EmailService {
   constructor(
-    private readonly mailerService: MailerService,
     private readonly logger: WinstonLoggerService,
+    @InjectQueue(SEND_EMAIL_QUEUE) private readonly emailQueue: Queue,
   ) {}
 
-  private async sendEmail(
+  private async queueEmailJob(
     recipients: string | string[],
     subject: string,
     template: string,
     context: object,
   ) {
-    this.logger.info(`Sending email: ${subject} to ${recipients}`);
+    this.logger.info(`Queuing email: ${subject} to ${recipients}`);
 
-    try {
-      await this.mailerService.sendMail({
-        to: recipients,
+    await this.emailQueue.add(
+      'sendEmail',
+      {
+        recipients,
         subject,
         template,
         context,
-      });
+      },
+      {
+        priority: 1,
+      },
+    );
 
-      this.logger.info(`Email sent successfully: ${subject}`);
-    } catch (error) {
-      this.logger.error(`Failed to send email: ${subject}`, error.stack);
-    }
+    this.logger.info(`Email job added to queue: ${SEND_EMAIL_QUEUE}`);
+  }
+
+  async sendEmail(
+    recipients: string | string[],
+    subject: string,
+    template: string,
+    context: object,
+  ) {
+    await this.queueEmailJob(recipients, subject, template, context);
   }
 
   async sendTaskNotification(
@@ -57,9 +71,14 @@ export class EmailService {
             taskName,
             taskDescription,
             projectName,
-            dueDate: date,
+            dueDate: format(new Date(date), 'MMMM dd, yyyy, h:mm a'),
           }
-        : { executorName, taskName, projectName, completionDate: date };
+        : {
+            executorName,
+            taskName,
+            projectName,
+            completionDate: format(new Date(date), 'MMMM dd, yyyy, h:mm a'),
+          };
 
     await this.sendEmail(recipients, subjects[type], templates[type], context);
   }

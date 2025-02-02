@@ -19,7 +19,7 @@ import { ACTIONS } from 'src/common/constants/actions';
 import { ERROR_MESSAGES } from 'src/common/constants';
 import { TaskStatus } from 'src/shared/enums';
 import { handleHttpException } from 'src/shared/exceptions';
-import { EmailService } from 'src/email/services/email.service';
+import { EmailService } from 'src/modules/email/email.service';
 import { RoleService } from '../role/role.service';
 
 @Injectable()
@@ -76,11 +76,12 @@ export class TaskService {
       if (assignee && assignee.email) {
         await this.emailService.sendTaskNotification(
           'assigned',
-          owner.firstName,
           task.name,
-          task.description,
+          assignee.firstName,
+          project.name,
           task.deadline,
           assignee.email,
+          task.description,
         );
       } else {
         this.logger.warn(`No email found for assignee ${assignee?.id}`);
@@ -198,11 +199,12 @@ export class TaskService {
         await this.handleAssigneeChange(dto.assigneeId, task, updates);
         await this.emailService.sendTaskNotification(
           'assigned',
-          user.lastName,
           task.name,
-          task.description,
+          user.firstName,
+          project.name,
           task.deadline,
           assignee.email,
+          task.description,
         );
       }
 
