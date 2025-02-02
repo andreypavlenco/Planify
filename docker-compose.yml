@@ -6,12 +6,14 @@ services:
     container_name: planify
     restart: always
     ports:
-      - "${PORT}:${PORT}" 
+      - "${APP_PORT}:${APP_PORT}" 
     env_file:
       - .env 
     depends_on:
-      - mysql
-      - redis
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     command: sh -c "npx typeorm migration:run -d dist/src/database/data-source.js && node dist/src/main.js"
 
   mysql:
@@ -27,6 +29,11 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   redis:
     image: redis:alpine
@@ -37,6 +44,45 @@ services:
     environment:
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT}
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    env_file:
+      - .env
+    ports:
+      - "${PROMETHEUS_PORT}:${PROMETHEUS_PORT}" 
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks:
+      - observability
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    env_file:
+      - .env
+    ports:
+      - "${GRAFANA_PORT}:${GRAFANA_PORT}" 
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - observability
+
+networks:
+  observability:
+    driver: bridge
 
 volumes:
   mysql_data:
+  redis_data:
+  grafana_data:

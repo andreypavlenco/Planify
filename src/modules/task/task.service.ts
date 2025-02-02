@@ -19,6 +19,8 @@ import { ACTIONS } from 'src/common/constants/actions';
 import { ERROR_MESSAGES } from 'src/common/constants';
 import { TaskStatus } from 'src/shared/enums';
 import { handleHttpException } from 'src/shared/exceptions';
+import { EmailService } from 'src/modules/email/email.service';
+import { RoleService } from '../role/role.service';
 
 @Injectable()
 export class TaskService {
@@ -29,6 +31,8 @@ export class TaskService {
     private readonly actionHistoryService: ActionHistoryService,
     private readonly logger: WinstonLoggerService,
     private readonly taskGateway: TaskGateway,
+    private readonly emailService: EmailService,
+    private readonly roleService: RoleService,
   ) {}
 
   async create(
@@ -67,6 +71,20 @@ export class TaskService {
       this.logger.info('Task creation logged in action history', {
         taskId: task.id,
       });
+
+      if (assignee && assignee.email) {
+        await this.emailService.sendTaskNotification(
+          'assigned',
+          task.name,
+          assignee.firstName,
+          project.name,
+          task.deadline,
+          assignee.email,
+          task.description,
+        );
+      } else {
+        this.logger.warn(`No email found for assignee ${assignee?.id}`);
+      }
 
       this.taskGateway.notifyTaskCreated(task);
 
@@ -162,11 +180,35 @@ export class TaskService {
         updates.push(ACTIONS.TASK.STATUS_CHANGED);
       }
 
-      if (dto.assigneeId && dto.assigneeId !== task.assignee?.id) {
-        await this.handleAssigneeChange(dto.assigneeId, task, updates);
+      if (dto.status === TaskStatus.DONE) {
+        const managers = await this.roleService.findProjectManagers(project.id);
+        const managerEmails = managers.map((manager) => manager.user.email);
+        await this.emailService.sendTaskNotification(
+          'completed',
+          task.name,
+          user.lastName,
+          project.name,
+          task.deadline,
+          managerEmails,
+        );
       }
 
-      const updatedTask = await this.repository.update({ ...task, ...dto });
+      if (dto.assigneeId && dto.assigneeId !== task.assignee?.id) {
+        const assignee = await this.userService.findById(dto.assigneeId);
+        await this.handleAssigneeChange(dto.assigneeId, task, updates);
+        await this.emailService.sendTaskNotification(
+          'assigned',
+          task.name,
+          user.firstName,
+          project.name,
+          task.deadline,
+          assignee.email,
+          task.description,
+        );
+      }
+
+      Object.assign(task, dto);
+      const updatedTask = await this.repository.update(task);
       this.logger.info('Task successfully updated', { taskId: id });
 
       updates.push(ACTIONS.TASK.UPDATED);

@@ -9,9 +9,16 @@ import { RoleGuard } from './guards/role.guard';
 import { RoleModule } from '../role/role.module';
 import { JwtAccessTokenStrategy } from './ strategy/jwt-access.token.strategy';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { EmailModule } from 'src/modules/email/email.module';
 
 @Module({
-  imports: [JwtModule.register({}), UserModule, PassportModule, RoleModule],
+  imports: [
+    JwtModule.register({}),
+    UserModule,
+    PassportModule,
+    RoleModule,
+    EmailModule,
+  ],
   controllers: [AuthController],
   providers: [
     AuthService,

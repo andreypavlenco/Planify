@@ -13,7 +13,14 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { DeleteResult } from 'typeorm';
 import { WinstonLoggerService } from 'src/shared/utils/logger';
 import { handleHttpException } from 'src/shared/exceptions';
-import { ERROR_MESSAGES } from 'src/common/constants';
+import {
+  DELETE_PROJECTS_COMPLETED_QUEUE,
+  ERROR_MESSAGES,
+} from 'src/common/constants';
+import { EmailService } from 'src/modules/email/email.service';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 
 @Injectable()
 export class ProjectService {
@@ -22,6 +29,9 @@ export class ProjectService {
     private readonly userService: UserService,
     private readonly roleService: RoleService,
     private readonly logger: WinstonLoggerService,
+    private readonly emailService: EmailService,
+    @InjectQueue(DELETE_PROJECTS_COMPLETED_QUEUE)
+    private readonly projectQueue: Queue,
   ) {}
 
   async create(dto: CreateProjectDto, userId: number): Promise<Project> {
@@ -48,7 +58,6 @@ export class ProjectService {
         userId: user.id,
         role: RoleName.MANAGER,
       });
-
       return project;
     } catch (error) {
       this.logger.error('Project creation failed', { error: error.message });
@@ -165,11 +174,18 @@ export class ProjectService {
     this.logger.info('Updating project', { projectId: id, updateData: dto });
 
     try {
-      const project = await this.findById(id);
-      const updatedProject = await this.repository.update({
-        ...project,
-        ...dto,
-      });
+      const project = await this.repository.findProjectWithUsers(id);
+
+      if (dto.status === ProjectStatus.COMPLETED) {
+        const emailUsers = project.users.map((user) => user.email);
+        await this.emailService.sendProjectNotification(
+          project.name,
+          emailUsers,
+        );
+      }
+
+      Object.assign(project, dto);
+      const updatedProject = await this.repository.update(project);
       if (!updatedProject) {
         this.logger.warn('Failed to update project - Not Found', {
           projectId: id,
@@ -211,5 +227,13 @@ export class ProjectService {
         `${ERROR_MESSAGES.PROJECT.DELETE_FAILED}: ${error.message}`,
       );
     }
+  }
+
+  @Cron(CronExpression.EVERY_MINUTE)
+  async removeProjectCompleted(): Promise<void> {
+    await this.projectQueue.add('remove-project', {
+      delay: 60000,
+      priority: 3,
+    });
   }
 }

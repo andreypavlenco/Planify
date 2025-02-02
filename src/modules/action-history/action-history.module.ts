@@ -9,6 +9,7 @@ import { DataBaseModule } from 'src/database/database.module';
 import { ActionHistoryRepository } from './repository/action-history.repository';
 import { ExtractProjectIdMiddleware } from 'src/common/middlewares';
 import { ActionHistoryProviders } from 'src/database/providers';
+import { ACTION_HISTORY_CONTROLLER, ACTION_HISTORY_ROUTES } from './constants';
 
 @Module({
   imports: [DataBaseModule],
@@ -22,7 +23,7 @@ import { ActionHistoryProviders } from 'src/database/providers';
 export class ActionHistoryModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(ExtractProjectIdMiddleware).forRoutes({
-      path: 'projects/:projectId/history',
+      path: `${ACTION_HISTORY_CONTROLLER}/${ACTION_HISTORY_ROUTES.GET_HISTORY}`,
       method: RequestMethod.GET,
     });
   }

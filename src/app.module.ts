@@ -1,3 +1,5 @@
+import { AnalyticsModule } from './modules/analytics/analytics.module';
+import { HealthModule } from './modules/health/health.module';
 import { RoleModule } from './modules/role/role.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
@@ -11,13 +13,18 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { ActionHistoryModule } from './modules/action-history/action-history.module';
 import { LoggerModule } from 'src/shared/utils/logger/logger.module.';
 import { WeatherModule } from './modules/weather-api/weather.module';
-import { RedisModule } from 'src/redis/redis.module';
+import { RedisModule } from 'src/core/redis/redis.module';
+import { EmailModule } from './modules/email/email.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    AnalyticsModule,
+    HealthModule,
     LoggerModule,
     WeatherModule,
     ActionHistoryModule,
+    EmailModule,
     RoleModule,
     UserModule,
     TaskModule,
@@ -26,6 +33,7 @@ import { RedisModule } from 'src/redis/redis.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    ScheduleModule.forRoot(),
     RedisModule,
     DataBaseModule,
     AuthModule,
