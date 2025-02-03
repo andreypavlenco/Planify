@@ -9,13 +9,12 @@ Planify is a project management tool designed to help organize tasks, projects, 
 To configure the project, create a `.env` file in the root directory with the following variables:
 
 ```dotenv
-PORT=3000
+APP_PORT=5000
 
 MYSQL_HOST=mysql
 MYSQL_PORT=3306
-MYSQL_USER=root
-MYSQL_PASSWORD=root
-MYSQL_DB=mydatabase
+MYSQL_PASSWORD=my_password
+MYSQL_DB=planify_db
 
 ACCESS_TOKEN_SECRET=yourAccessTokenSecretKey
 ACCESS_TOKEN_EXPIRES_IN=40m
@@ -23,17 +22,17 @@ ACCESS_TOKEN_EXPIRES_IN=40m
 REFRESH_TOKEN_SECRET=yourRefreshTokenSecretKey
 REFRESH_TOKEN_EXPIRES_IN=7d
 
-OPEN_WEATHER_MAP_API_KEY=32c896c6b3b9a7ef750f87a6e337a
+OPEN_WEATHER_MAP_API_KEY=32c896c6b3b9a7efe2775a0f87ae337a
 
 REDIS_HOST=redis
-REDIS_PORT=6379
+REDIS_PORT=6379 
 REDIS_DB=0
 
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 EMAIL_SECURE=false
 EMAIL_USER=example@gmail.com
-EMAIL_PASS=your_password
+EMAIL_PASS=your password
 EMAIL_FROM_NAME=No Reply
 EMAIL_FROM_ADDRESS=noreply@example.com
 
@@ -79,7 +78,7 @@ docker-compose down
 ### Rebuild the Containers
 To rebuild the Docker images after changes:
 ```bash
-docker-compose up --build
+docker compose up -d --build
 ```
 
 ### Run Database Migrations
