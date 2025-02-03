@@ -56,11 +56,14 @@ services:
     env_file:
       - .env
     ports:
-      - "${PROMETHEUS_PORT}:${PROMETHEUS_PORT}" 
+      - "${PROMETHEUS_PORT}:${PROMETHEUS_PORT}"
     command:
       - --config.file=/etc/prometheus/prometheus.yml
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    environment:
+      - PROMETHEUS_TARGET=${PROMETHEUS_TARGET}
+      - APP_PORT=${APP_PORT}
     networks:
       - observability
 
