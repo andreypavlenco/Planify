@@ -5,8 +5,7 @@ Planify is a project management tool designed to help organize tasks, projects, 
 ---
 
 ## Environment Configuration
-
-To configure the project, create a `.env` file in the root directory with the following variables:
+To configure the project, create a `.env` file in the root directory with the following variables as an example.
 
 ```dotenv
 APP_PORT=5000
@@ -92,12 +91,7 @@ docker exec -it planify npx typeorm migration:run -d dist/src/database/data-sour
 
 ## Project Structure
 
----
-
-## Project Structure
-
 ```plaintext
-.
 
 ├── src/
 │   ├── common/           # Common utilities and helpers
