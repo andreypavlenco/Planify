@@ -3,7 +3,6 @@ import {
   HealthIndicatorResult,
   HealthIndicatorService,
 } from '@nestjs/terminus';
-//import Redis from 'ioredis';
 import { RedisClient } from 'src/core/redis/redis.client';
 import { WinstonLoggerService } from 'src/shared/utils/logger';
 
