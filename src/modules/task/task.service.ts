@@ -86,7 +86,7 @@ export class TaskService {
         this.logger.warn(`No email found for assignee ${assignee?.id}`);
       }
 
-      this.taskGateway.notifyTaskCreated(task);
+      await this.taskGateway.notifyTaskCreated(task);
 
       return task;
     } catch (error) {
@@ -95,8 +95,9 @@ export class TaskService {
         userId,
         error: error.message,
       });
-      throw new InternalServerErrorException(
-        `${ERROR_MESSAGES.TASK.CREATE_FAILED} for Project ID ${projectId}: ${error.message}`,
+      handleHttpException(
+        error,
+        `${ERROR_MESSAGES.TASK.CREATE_FAILED}: ${error.message}`,
       );
     }
   }
@@ -118,7 +119,8 @@ export class TaskService {
         status,
         error: error.message,
       });
-      throw new InternalServerErrorException(
+      handleHttpException(
+        error,
         `${ERROR_MESSAGES.TASK.RETRIEVE_FAILED}: ${error.message}`,
       );
     }
@@ -129,6 +131,7 @@ export class TaskService {
 
     try {
       const task = await this.repository.findById(id);
+
       if (!task) {
         this.logger.warn('Task not found', { taskId: id });
         throw new NotFoundException(
@@ -221,7 +224,8 @@ export class TaskService {
         userId,
         error: error.message,
       });
-      throw new InternalServerErrorException(
+      handleHttpException(
+        error,
         `${ERROR_MESSAGES.TASK.UPDATE_FAILED}: ${error.message}`,
       );
     }

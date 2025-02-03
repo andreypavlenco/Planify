@@ -86,9 +86,9 @@ export class AnalyticsService {
       }
 
       const totalCompletionTime = project.tasks.reduce((acc, task) => {
-        const createdAt = new Date(task.createdAt).getTime();
-        const completedAt = new Date(task.deadline).getTime();
-        return acc + (completedAt - createdAt);
+        const createdData = new Date(task.createdAt).getTime();
+        const completedData = new Date(task.deadline).getTime();
+        return acc + (completedData - createdData);
       }, 0);
 
       const averageTime = totalCompletionTime / project.tasks.length;
@@ -96,6 +96,7 @@ export class AnalyticsService {
       this.logger.info(
         `Successfully fetched average task completion time for project ${projectId}`,
       );
+
       return averageTime / (1000 * 60 * 60);
     } catch (error) {
       this.logger.error(
@@ -143,10 +144,10 @@ export class AnalyticsService {
       const topUsers = Object.values(userTaskCount)
         .sort((a, b) => b.taskCount - a.taskCount)
         .slice(0, 3);
-
       this.logger.info(
         `Successfully fetched top active users for project ${projectId}`,
       );
+
       return topUsers;
     } catch (error) {
       this.logger.error(
