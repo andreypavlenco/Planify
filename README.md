@@ -73,7 +73,7 @@ Once everything is running, the application will be accessible at:
 ### Stop the Containers
 To stop all running containers:
 ```bash
-docker-compose down
+docker compose down
 ```
 
 ### Rebuild the Containers
