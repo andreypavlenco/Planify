@@ -23,9 +23,11 @@ export class WeatherService {
     try {
       const cacheKey = `weather_${data.lat}_${data.long}`;
       const cachedData = await this.redisService.get(cacheKey);
+
       if (cachedData) {
         return JSON.parse(cachedData);
       }
+
       await this.weatherQueue.add(
         'fetch-weather',
         { lat: data.lat, long: data.long },
@@ -65,11 +67,12 @@ export class WeatherService {
       }
       const cacheKey = `weather_${data.lat}_${data.long}`;
       const cachedData = await this.redisService.get(cacheKey);
+
       if (cachedData) {
         this.logger.info(`Using cached weather data for ${cacheKey}`);
-
         return;
       }
+
       await this.weatherQueue.add(
         'fetch-weather',
         { lat: data.lat, long: data.long },

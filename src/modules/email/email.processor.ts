@@ -3,7 +3,7 @@ import { Job } from 'bullmq';
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { WinstonLoggerService } from 'src/shared/utils/logger';
-import { SEND_EMAIL_QUEUE } from 'src/common/constants/redis.queue';
+import { SEND_EMAIL_QUEUE } from 'src/common/constants';
 
 @Processor(SEND_EMAIL_QUEUE)
 @Injectable()

@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { WinstonLoggerService } from 'src/shared/utils/logger';
-import { SEND_EMAIL_QUEUE } from 'src/common/constants/redis.queue';
 import { format } from 'date-fns';
+import { SEND_EMAIL_QUEUE } from 'src/common/constants';
 
 @Injectable()
 export class EmailService {
@@ -17,7 +17,7 @@ export class EmailService {
     subject: string,
     template: string,
     context: object,
-  ) {
+  ): Promise<void> {
     this.logger.info(`Queuing email: ${subject} to ${recipients}`);
 
     await this.emailQueue.add(
@@ -83,7 +83,10 @@ export class EmailService {
     await this.sendEmail(recipients, subjects[type], templates[type], context);
   }
 
-  async sendProjectNotification(projectName: string, recipients: string[]) {
+  async sendProjectNotification(
+    projectName: string,
+    recipients: string[],
+  ): Promise<void> {
     await this.sendEmail(
       recipients,
       'Project Completed!',

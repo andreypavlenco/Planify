@@ -19,11 +19,14 @@ export class ActionHistoryService {
     project: Project,
     action: string,
   ): Promise<ActionHistory> {
-    this.logger.info('Creating ActionHistory entry', {
+    let logerInfo = {
       taskId: task.id,
       userId: user.id,
       projectId: project.id,
       action,
+    };
+    this.logger.info('Creating ActionHistory entry', {
+      ...logerInfo,
     });
 
     try {
@@ -42,10 +45,7 @@ export class ActionHistoryService {
       return actionHistory;
     } catch (error) {
       this.logger.error('Failed to create ActionHistory entry', {
-        taskId: task.id,
-        userId: user.id,
-        projectId: project.id,
-        action,
+        ...logerInfo,
         error: error.message,
       });
       throw new Error(`Failed to create ActionHistory: ${error.message}`);

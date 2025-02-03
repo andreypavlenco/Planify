@@ -15,6 +15,7 @@ export class RoleService {
 
   async createForUser(user: User, roleName: RoleName): Promise<Role> {
     this.logger.info('Creating role for user', { userId: user.id, roleName });
+
     return this.createRole(user, roleName);
   }
 
