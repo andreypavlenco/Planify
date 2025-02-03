@@ -49,7 +49,8 @@ GRAFANA_PORT=3000
 To start the application, run the following command:
 
 ```bash
-docker-compose up --build
+docker compose build
+docker compose up -d
 ```
 
 ### What This Command Does:
@@ -78,7 +79,7 @@ docker-compose down
 ### Rebuild the Containers
 To rebuild the Docker images after changes:
 ```bash
-docker compose up -d --build
+docker compose up --build
 ```
 
 ### Run Database Migrations
