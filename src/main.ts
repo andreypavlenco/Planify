@@ -5,7 +5,7 @@ import { expressMiddleware as prometheusMiddleware } from 'prometheus-api-metric
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 
-const APP_NAME_PREFIX = 'app-name-prefix';
+const APP_NAME_PREFIX = 'planify';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
